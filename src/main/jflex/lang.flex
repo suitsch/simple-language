@@ -32,12 +32,31 @@ import edu.appstate.cs.analysis.parser.LanguageParser.Terminals;
 %}
 LineTerminator = \r|\n|\r\n
 WhiteSpace     = {LineTerminator} | [ \t\f]
+Integer        = [:digit:] [:digit:]*
 %%
 
 {WhiteSpace}+    { /* ignore */ }
 <YYINITIAL> {
+	{ Integer }  { return newToken(Terminals.INTEGER, new Integer(yytext())); }
+	"else-if"    { return newToken(Terminals.ELSEIF); }
+	"return"     { return newToken(Terminals.RETURN); }
     "hello"      { return newToken(Terminals.HELLO); }
     "world"      { return newToken(Terminals.WORLD); }
+	"while"      { return newToken(Terminals.WHILE); }
+	"else"       { return newToken(Terminals.ELSE); }
+	"then"       { return newToken(Terminals.THEN); }
+	"for"        { return newToken(Terminals.FOR); }
+	"in"         { return newToken(Terminals.IN); }
+	"if"         { return newToken(Terminals.IF); }
+	"="          { return newToken(Terminals.ASSIGN); }
+	";"          { return newToken(Terminals.SEMI); }
+	"{"          { return newToken(Terminals.LCURLY); }
+	"}"          { return newToken(Terminals.RCURLY); }
+	","          { return newToken(Terminals.COMMA); }
+	"["          { return newToken(Terminals.LBRACKET); }
+	"]"          { return newToken(Terminals.RBRACKET); }
+	"("          { return newToken(Terminals.LPAREN); }
+	")"          { return newToken(Terminals.RPAREN); }
 }
 
 [^]|\n             { throw new Scanner.Exception("unexpected character '" + yytext() + "'"); }

@@ -2,11 +2,18 @@
 %class "LanguageParser";
 %import "edu.appstate.cs.analysis.ast.*";
 
-%terminals HELLO, WORLD;
+%terminals HELLO, WORLD, FOR, RETURN, WHILE,
+           IN, IF, ELSEIF, ELSE, ASSIGN, SEMI,
+           LCURLY, RCURLY, THEN, COMMA, LBRACKET,
+           RBRACKET, LPAREN, RPAREN, INTEGER;
 
 %goal program;
 
 program
     = HELLO WORLD                               {: return new HelloWorld(); :}
+    /* These are included since the tokens are not generated if they are not used */
+    | FOR RETURN WHILE IN IF ELSEIF ELSE ASSIGN {: return new HelloWorld(); :}
+    | SEMI LCURLY RCURLY THEN COMMA LBRACKET    {: return new HelloWorld(); :}
+    | RBRACKET LPAREN RPAREN INTEGER            {: return new HelloWorld(); :}
     ;
 
