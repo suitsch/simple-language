@@ -1,0 +1,12 @@
+%package "edu.appstate.cs.analysis.parser";
+%class "LanguageParser";
+%import "edu.appstate.cs.analysis.ast.*";
+
+%terminals HELLO, WORLD;
+
+%goal program;
+
+program
+    = HELLO WORLD                               {: return new HelloWorld(); :}
+    ;
+

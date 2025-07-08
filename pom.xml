@@ -1,0 +1,72 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>edu.appstate.cs</groupId>
+  <artifactId>program-analysis</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+
+  <properties>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>de.jflex</groupId>
+        <artifactId>jflex-maven-plugin</artifactId>
+        <version>1.9.1</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>
+                generate
+              </goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>edu.ecu.cs.plse</groupId>
+        <artifactId>beaver-maven-plugin</artifactId>
+        <configuration>
+          <grammarDefinitions>
+            <param>src/main/beaver/lang.grammar</param>
+          </grammarDefinitions>
+          <outputDirectory>target/generated-sources/beaver</outputDirectory>
+        </configuration>
+        <version>0.0.1-SNAPSHOT</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>
+                generate
+              </goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>net.sf.beaver</groupId>
+      <artifactId>beaver-rt</artifactId>
+      <version>0.9.11</version>
+    </dependency>
+  </dependencies>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>beaver-maven-plugin</id>
+      <url>https://raw.githubusercontent.com/ecu-pase-lab/beaver-maven-plugin/mvn-repo</url>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
+</project>
