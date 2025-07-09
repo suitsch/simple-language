@@ -2,6 +2,7 @@ package edu.appstate.cs.analysis;
 
 import beaver.Symbol;
 import beaver.Scanner;
+import java.math.BigInteger;
 
 import edu.appstate.cs.analysis.parser.LanguageParser.Terminals;
 
@@ -33,18 +34,21 @@ import edu.appstate.cs.analysis.parser.LanguageParser.Terminals;
 LineTerminator = \r|\n|\r\n
 WhiteSpace     = {LineTerminator} | [ \t\f]
 Integer        = [:digit:] [:digit:]*
+String         = [\"] [^\"]* [\"]
+Identifier     = [:jletter:] [:jletterdigit:]*
 %%
 
 {WhiteSpace}+    { /* ignore */ }
 <YYINITIAL> {
-	{ Integer }  { return newToken(Terminals.INTEGER, new Integer(yytext())); }
+	{Integer}    { return newToken(Terminals.INTEGER, new BigInteger(yytext())); }
+	{String}     { return newToken(Terminals.STRING, new String(yytext())); }
 	"else-if"    { return newToken(Terminals.ELSEIF); }
 	"return"     { return newToken(Terminals.RETURN); }
-    "hello"      { return newToken(Terminals.HELLO); }
-    "world"      { return newToken(Terminals.WORLD); }
 	"while"      { return newToken(Terminals.WHILE); }
+	"false"      { return newToken(Terminals.FALSE); }
 	"else"       { return newToken(Terminals.ELSE); }
 	"then"       { return newToken(Terminals.THEN); }
+	"true"       { return newToken(Terminals.TRUE); }
 	"for"        { return newToken(Terminals.FOR); }
 	"in"         { return newToken(Terminals.IN); }
 	"if"         { return newToken(Terminals.IF); }
@@ -57,6 +61,7 @@ Integer        = [:digit:] [:digit:]*
 	"]"          { return newToken(Terminals.RBRACKET); }
 	"("          { return newToken(Terminals.LPAREN); }
 	")"          { return newToken(Terminals.RPAREN); }
+	{Identifier} { return newToken(Terminals.IDENTIFIER, new String(yytext())); }
 }
 
 [^]|\n             { throw new Scanner.Exception("unexpected character '" + yytext() + "'"); }

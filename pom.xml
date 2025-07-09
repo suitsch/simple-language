@@ -48,6 +48,21 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.5.1</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <mainClass>edu.appstate.cs.analysis.Analysis</mainClass>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 
@@ -56,6 +71,11 @@
       <groupId>net.sf.beaver</groupId>
       <artifactId>beaver-rt</artifactId>
       <version>0.9.11</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jline</groupId>
+      <artifactId>jline</artifactId>
+      <version>3.30.0</version>
     </dependency>
   </dependencies>
 

@@ -1,19 +1,37 @@
 %package "edu.appstate.cs.analysis.parser";
 %class "LanguageParser";
 %import "edu.appstate.cs.analysis.ast.*";
+%import "java.math.BigInteger";
 
-%terminals HELLO, WORLD, FOR, RETURN, WHILE,
+%terminals FOR, RETURN, WHILE,
            IN, IF, ELSEIF, ELSE, ASSIGN, SEMI,
            LCURLY, RCURLY, THEN, COMMA, LBRACKET,
-           RBRACKET, LPAREN, RPAREN, INTEGER;
+           RBRACKET, LPAREN, RPAREN, INTEGER, STRING,
+           TRUE, FALSE, IDENTIFIER;
 
-%goal program;
+%typeof INTEGER = "BigInteger";
+%typeof IDENTIFIER = "String";
+%typeof stmts = "StmtList";
+%typeof expr = "Expr";
+%typeof stmt = "Stmt";
 
-program
-    = HELLO WORLD                               {: return new HelloWorld(); :}
-    /* These are included since the tokens are not generated if they are not used */
-    | FOR RETURN WHILE IN IF ELSEIF ELSE ASSIGN {: return new HelloWorld(); :}
-    | SEMI LCURLY RCURLY THEN COMMA LBRACKET    {: return new HelloWorld(); :}
-    | RBRACKET LPAREN RPAREN INTEGER            {: return new HelloWorld(); :}
+%goal stmts;
+
+/* This can be removed once all tokens are used in a real production */
+/* START */
+%goal placeholder;
+placeholder = FOR RETURN WHILE IN IF ELSEIF ELSE LCURLY RCURLY THEN COMMA LBRACKET RBRACKET LPAREN RPAREN STRING TRUE FALSE;
+/* END */
+
+stmts
+    = stmt.s {: return new StmtList(s); :}
+    | stmt.s stmts.ss {: return new StmtList(s, ss); :}
     ;
 
+stmt
+    = IDENTIFIER.i ASSIGN expr.e SEMI {: return new AssignStmt(i, e); :}
+    ;
+
+expr
+    = INTEGER.n {: return new IntLiteral(n); :}
+    ;
