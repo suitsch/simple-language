@@ -8,4 +8,5 @@ public interface AnalysisVisitor<R> {
     R visitAssignStmt(AssignStmt assignStmt);
     R visitIntLiteral(IntLiteral intLiteral);
     R visitPlusExpr(PlusExpr plusExpr);
+    R visitMultExpr(MultExpr multExpr);
 }
