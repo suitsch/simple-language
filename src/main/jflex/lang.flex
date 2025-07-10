@@ -45,10 +45,10 @@ Identifier     = [:jletter:] [:jletterdigit:]*
 	"else-if"    { return newToken(Terminals.ELSEIF); }
 	"return"     { return newToken(Terminals.RETURN); }
 	"while"      { return newToken(Terminals.WHILE); }
-	"false"      { return newToken(Terminals.FALSE); }
+	"False"      { return newToken(Terminals.FALSE); }
 	"else"       { return newToken(Terminals.ELSE); }
 	"then"       { return newToken(Terminals.THEN); }
-	"true"       { return newToken(Terminals.TRUE); }
+	"True"       { return newToken(Terminals.TRUE); }
 	"for"        { return newToken(Terminals.FOR); }
 	"in"         { return newToken(Terminals.IN); }
 	"if"         { return newToken(Terminals.IF); }
