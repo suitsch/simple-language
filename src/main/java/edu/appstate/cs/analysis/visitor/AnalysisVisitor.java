@@ -11,4 +11,5 @@ public interface AnalysisVisitor<R> {
     R visitMultExpr(MultExpr multExpr);
     R visitIdentExpr(IdentExpr identExpr);
     R visitForStmt(ForStmt forStmt);
+    R visitExprStmt(ExprStmt exprStmt);
 }
