@@ -7,7 +7,7 @@
            IN, IF, ELSEIF, ELSE, ASSIGN, SEMI,
            LCURLY, RCURLY, THEN, COMMA, LBRACKET,
            RBRACKET, LPAREN, RPAREN, INTEGER, STRING,
-           TRUE, FALSE, IDENTIFIER;
+           TRUE, FALSE, IDENTIFIER, PLUS;
 
 %typeof INTEGER = "BigInteger";
 %typeof IDENTIFIER = "String";
@@ -34,4 +34,5 @@ stmt
 
 expr
     = INTEGER.n {: return new IntLiteral(n); :}
+    | expr.a PLUS expr.b {: return new PlusExpr(a, b); :}
     ;
