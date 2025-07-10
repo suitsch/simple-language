@@ -29,11 +29,11 @@ public class PrettyPrinter implements AnalysisVisitor<String> {
 
     @Override
     public String visitPlusExpr(PlusExpr plusExpr) {
-        return String.format("%s + %s", plusExpr.getLeft().accept(this), plusExpr.getRight().accept(this));
+        return String.format("(%s + %s)", plusExpr.getLeft().accept(this), plusExpr.getRight().accept(this));
     }
 
     @Override
     public String visitMultExpr(MultExpr multExpr) {
-        return String.format("%s * %s", multExpr.getLeft().accept(this), multExpr.getRight().accept(this));
+        return String.format("(%s * %s)", multExpr.getLeft().accept(this), multExpr.getRight().accept(this));
     }
 }
