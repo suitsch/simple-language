@@ -36,4 +36,5 @@ expr
     = INTEGER.n {: return new IntLiteral(n); :}
     | expr.a PLUS expr.b {: return new PlusExpr(a, b); :}
     | expr.a MULT expr.b {: return new MultExpr(a, b); :}
+    | IDENTIFIER.i {: return new IdentExpr(i); :}
     ;

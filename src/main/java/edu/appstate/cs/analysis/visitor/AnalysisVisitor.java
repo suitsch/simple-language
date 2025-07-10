@@ -9,4 +9,5 @@ public interface AnalysisVisitor<R> {
     R visitIntLiteral(IntLiteral intLiteral);
     R visitPlusExpr(PlusExpr plusExpr);
     R visitMultExpr(MultExpr multExpr);
+    R visitIdentExpr(IdentExpr identExpr);
 }
