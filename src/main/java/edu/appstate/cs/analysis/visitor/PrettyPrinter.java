@@ -1,6 +1,7 @@
 package edu.appstate.cs.analysis.visitor;
 
 import edu.appstate.cs.analysis.ast.AssignStmt;
+import edu.appstate.cs.analysis.ast.ForStmt;
 import edu.appstate.cs.analysis.ast.IdentExpr;
 import edu.appstate.cs.analysis.ast.IntLiteral;
 import edu.appstate.cs.analysis.ast.MultExpr;
@@ -41,5 +42,14 @@ public class PrettyPrinter implements AnalysisVisitor<String> {
     @Override
     public String visitIdentExpr(IdentExpr identExpr) {
         return identExpr.getIdent();
+    }
+
+    @Override
+    public String visitForStmt(ForStmt forStmt) {
+        return String.format("for %s in %s {\n %s\n}",
+            forStmt.getIdent(),
+            forStmt.getExpr().accept(this),
+            forStmt.getStmts().accept(this)
+        );
     }
 }

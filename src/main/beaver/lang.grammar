@@ -20,7 +20,7 @@
 /* This can be removed once all tokens are used in a real production */
 /* START */
 %goal placeholder;
-placeholder = FOR RETURN WHILE IN IF ELSEIF ELSE LCURLY RCURLY THEN COMMA LBRACKET RBRACKET LPAREN RPAREN STRING TRUE FALSE;
+placeholder = RETURN WHILE IN IF ELSEIF ELSE LCURLY RCURLY THEN COMMA LBRACKET RBRACKET LPAREN RPAREN STRING TRUE FALSE;
 /* END */
 
 stmts
@@ -30,6 +30,7 @@ stmts
 
 stmt
     = IDENTIFIER.i ASSIGN expr.e SEMI {: return new AssignStmt(i, e); :}
+    | FOR IDENTIFIER.i IN expr.e LCURLY stmts.ss RCURLY {: return new ForStmt(i, e, ss); :}
     ;
 
 expr
