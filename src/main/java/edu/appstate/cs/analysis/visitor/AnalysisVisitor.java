@@ -12,6 +12,8 @@ public interface AnalysisVisitor<R> {
 
     R visitPlusExpr(PlusExpr plusExpr);
 
+    R visitSubExpr(SubExpr subExpr);
+
     R visitMultExpr(MultExpr multExpr);
 
     R visitIdentExpr(IdentExpr identExpr);
@@ -19,6 +21,8 @@ public interface AnalysisVisitor<R> {
     R visitForStmt(ForStmt forStmt);
 
     R visitIfElseStmt(IfElseStmt ifElseStmt);
+
+    R visitWhileStmt(WhileStmt whileStmt);
 
     R visitExprStmt(ExprStmt exprStmt);
 
