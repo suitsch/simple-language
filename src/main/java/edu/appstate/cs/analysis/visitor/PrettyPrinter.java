@@ -28,6 +28,11 @@ public class PrettyPrinter implements AnalysisVisitor<String> {
     }
 
     @Override
+    public String visitSubExpr(SubExpr subExpr) {
+        return String.format("(%s + %s)", subExpr.getLeft().accept(this), subExpr.getRight().accept(this));
+    }
+
+    @Override
     public String visitMultExpr(MultExpr multExpr) {
         return String.format("(%s * %s)", multExpr.getLeft().accept(this), multExpr.getRight().accept(this));
     }
@@ -54,8 +59,15 @@ public class PrettyPrinter implements AnalysisVisitor<String> {
     @Override
     public String visitIfStmt(IfStmt ifStmt) {
         return String.format("if %s then {\n %s\n}",
-            ifStmt.getExpr().accept(this),
-            ifStmt.getStmts().accept(this)
+                ifStmt.getExpr().accept(this),
+                ifStmt.getStmts().accept(this)
+        );
+    }
+
+    public String visitWhileStmt(WhileStmt whileStmt) {
+        return String.format("while %s {\n %s\n}",
+            whileStmt.getExpr().accept(this),
+            whileStmt.getStmts().accept(this)
         );
     }
 
