@@ -53,6 +53,7 @@ elseif
 expr
     = INTEGER.n {: return new IntLiteral(n); :}
     | expr.a PLUS expr.b {: return new PlusExpr(a, b); :}
+    | expr.a SUB expr.b {: return new SubExpr(a, b); :}
     | expr.a MULT expr.b {: return new MultExpr(a, b); :}
     | expr.a DIV expr.b {: return new DivExpr(a, b); :}
     | IDENTIFIER.i {: return new IdentExpr(i); :}
