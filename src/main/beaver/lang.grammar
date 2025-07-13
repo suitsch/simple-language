@@ -7,7 +7,7 @@
            IN, IF, ELSEIF, ELSE, ASSIGN, SEMI,
            LCURLY, RCURLY, THEN, COMMA, LBRACKET,
            RBRACKET, LPAREN, RPAREN, INTEGER, STRING,
-           TRUE, FALSE, IDENTIFIER, PLUS, MULT;
+           TRUE, FALSE, IDENTIFIER, PLUS, MULT, SUB;
 
 %typeof INTEGER = "BigInteger";
 %typeof IDENTIFIER = "String";
@@ -20,7 +20,7 @@
 /* This can be removed once all tokens are used in a real production */
 /* START */
 %goal placeholder;
-placeholder = RETURN WHILE IN IF ELSEIF ELSE LCURLY RCURLY THEN COMMA LBRACKET RBRACKET LPAREN RPAREN STRING TRUE FALSE;
+placeholder = RETURN IN IF ELSEIF ELSE LCURLY RCURLY THEN COMMA LBRACKET RBRACKET LPAREN RPAREN STRING TRUE FALSE;
 /* END */
 
 stmts
@@ -31,12 +31,14 @@ stmts
 stmt
     = IDENTIFIER.i ASSIGN expr.e SEMI {: return new AssignStmt(i, e); :}
     | FOR IDENTIFIER.i IN expr.e LCURLY stmts.ss RCURLY {: return new ForStmt(i, e, ss); :}
+    | WHILE expr.e LCURLY stmts.ss RCURLY {: return new WhileStmt(e, ss); :}
     | expr.e SEMI {: return new ExprStmt(e); :}
     ;
 
 expr
     = INTEGER.n {: return new IntLiteral(n); :}
     | expr.a PLUS expr.b {: return new PlusExpr(a, b); :}
+    | expr.a SUB expr.b {: return new SubExpr(a, b); :}
     | expr.a MULT expr.b {: return new MultExpr(a, b); :}
     | IDENTIFIER.i {: return new IdentExpr(i); :}
     ;
