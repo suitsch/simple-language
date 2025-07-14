@@ -63,4 +63,15 @@ public class PrettyPrinter implements AnalysisVisitor<String> {
     public String visitExprStmt(ExprStmt exprStmt) {
         return String.format("%s;", exprStmt.getExpr().accept(this));
     }
+
+    @Override
+    public String visitOrExpr(OrExpr orExpr) {
+        return String.format("%s or %s",
+            orExpr.getLeftExpr(), orExpr.getRightExpr());
+    }
+
+    @Override
+    public String visitReturnStmt(ReturnStmt returnStmt) {
+        return String.format("return %s;", returnStmt.getRetExpr());
+    }
 }
