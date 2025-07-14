@@ -7,7 +7,8 @@
            IN, IF, ELSEIF, ELSE, ASSIGN, SEMI,
            LCURLY, RCURLY, THEN, COMMA, LBRACKET,
            RBRACKET, LPAREN, RPAREN, INTEGER, STRING,
-           TRUE, FALSE, IDENTIFIER, PLUS, MULT, SUB;
+           TRUE, FALSE, IDENTIFIER, PLUS, MULT, SUB,
+           OR;
 
 %typeof INTEGER = "BigInteger";
 %typeof IDENTIFIER = "String";
@@ -20,7 +21,7 @@
 /* This can be removed once all tokens are used in a real production */
 /* START */
 %goal placeholder;
-placeholder = RETURN IN IF ELSEIF ELSE LCURLY RCURLY THEN COMMA LBRACKET RBRACKET LPAREN RPAREN STRING TRUE FALSE;
+placeholder = RETURN IN IF ELSEIF ELSE LCURLY RCURLY THEN COMMA LBRACKET RBRACKET LPAREN RPAREN STRING TRUE FALSE OR;
 /* END */
 
 stmts
@@ -32,6 +33,7 @@ stmt
     = IDENTIFIER.i ASSIGN expr.e SEMI {: return new AssignStmt(i, e); :}
     | FOR IDENTIFIER.i IN expr.e LCURLY stmts.ss RCURLY {: return new ForStmt(i, e, ss); :}
     | WHILE expr.e LCURLY stmts.ss RCURLY {: return new WhileStmt(e, ss); :}
+    | RETURN expr.e {: return new ReturnStmt(e); :}
     | expr.e SEMI {: return new ExprStmt(e); :}
     ;
 
@@ -40,5 +42,6 @@ expr
     | expr.a PLUS expr.b {: return new PlusExpr(a, b); :}
     | expr.a SUB expr.b {: return new SubExpr(a, b); :}
     | expr.a MULT expr.b {: return new MultExpr(a, b); :}
+    | expr.a OR expr.b {: return new OrExpr(a, b); :}
     | IDENTIFIER.i {: return new IdentExpr(i); :}
     ;

@@ -14,4 +14,7 @@ public interface AnalysisVisitor<R> {
     R visitForStmt(ForStmt forStmt);
     R visitWhileStmt(WhileStmt whileStmt);
     R visitExprStmt(ExprStmt exprStmt);
+    // ND class adds
+    R visitReturnStmt(ReturnStmt returnStmt);
+    R visitOrExpr(OrExpr orExpr);
 }
