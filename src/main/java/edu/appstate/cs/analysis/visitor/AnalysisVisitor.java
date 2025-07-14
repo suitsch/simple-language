@@ -13,9 +13,12 @@ public interface AnalysisVisitor<R> {
     R visitDivExpr(DivExpr divExpr);
     R visitIdentExpr(IdentExpr identExpr);
     R visitForStmt(ForStmt forStmt);
-    R visitIfStmt(IfStmt ifStmt);
     R visitWhileStmt(WhileStmt whileStmt);
     R visitExprStmt(ExprStmt exprStmt);
     R visitNotEqlExpr(NotEqlExpr notEqlExpr);
     R visitDeclStmt(DeclStmt declStmt);
+    R visitIfStmt(IfStmt ifStmt);   
+    R visitElseIf(ElseIf elseIf);
+    R visitNotExpr(NotExpr notExpr);
+
 }
