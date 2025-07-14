@@ -98,11 +98,11 @@ public class PrettyPrinter implements AnalysisVisitor<String> {
 
         StringBuilder ifelif = new StringBuilder();
 
-    ifelif.append(String.format("if %s then {\n%s}\n",
+        ifelif.append(String.format("if %s then {\n%s}\n",
         ifElseIfStmt.getCondition().accept(this),
         ifElseIfStmt.getStmts().accept(this)));
 
-    if (ifElseIfStmt.getElseIfs() != null) {
+        if (ifElseIfStmt.getElseIfs() != null) {
         ifelif.append(ifElseIfStmt.getElseIfs().accept(this));
         
         }
