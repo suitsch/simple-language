@@ -41,4 +41,5 @@ public interface AnalysisVisitor<R> {
     R visitNotEqlExpr(NotEqlExpr notEqlExpr);
 
     R visitDeclStmt(DeclStmt declStmt);
+
 }

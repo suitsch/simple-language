@@ -30,7 +30,7 @@ public class IfStmt extends Stmt {
     public StmtList getElseBody() {
         return elseBody;
     }
-    
+
     public <R> R accept(AnalysisVisitor<R> analysisVisitor) {
         return analysisVisitor.visitIfStmt(this);
     }
