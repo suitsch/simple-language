@@ -8,13 +8,14 @@
            LCURLY, RCURLY, THEN, COMMA, LBRACKET,
            RBRACKET, LPAREN, RPAREN, INTEGER, STRING,
            TRUE, FALSE, IDENTIFIER, PLUS, MULT, NOTEQL,
-           VAR;
+           VAR, NOT;
 
 %typeof INTEGER = "BigInteger";
 %typeof IDENTIFIER = "String";
 %typeof stmts = "StmtList";
 %typeof expr = "Expr";
 %typeof stmt = "Stmt";
+%typeof elseifs = "StmtList";
 
 %goal stmts;
 
@@ -34,6 +35,12 @@ stmt
     | FOR IDENTIFIER.i IN expr.e LCURLY stmts.ss RCURLY {: return new ForStmt(i, e, ss); :}
     | expr.e SEMI {: return new ExprStmt(e); :}
     | VAR IDENTIFIER.i SEMI {: return new DeclStmt(i, null); :}
+    | IF expr.e THEN LCURLY stmts.ss RCURLY elseifs.es ELSE LCURLY stmts.s2 RCURLY {: return new IfStmt(e, ss, es, s2); :}
+    ;
+
+elseifs
+    = ELSEIF expr.e THEN LCURLY stmts.s RCURLY elseifs.ss {: return new StmtList(new ElseIf(e, s), ss); :}
+    | ELSEIF expr.e THEN LCURLY stmts.s RCURLY {: return new StmtList(new ElseIf(e, s)); :}
     ;
 
 expr
@@ -42,4 +49,5 @@ expr
     | expr.a MULT expr.b {: return new MultExpr(a, b); :}
     | IDENTIFIER.i {: return new IdentExpr(i); :}
     | expr.a NOTEQL expr.b {: return new NotEqlExpr(a, b); :}
+    | NOT expr.a {: return new NotExpr(a); :}
     ;
