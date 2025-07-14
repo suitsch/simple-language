@@ -27,4 +27,8 @@ public interface AnalysisVisitor<R> {
     R visitExprStmt(ExprStmt exprStmt);
 
     R visitEqualExpr(EqualExpr equalExpr);
+
+    R visitNotEqlExpr(NotEqlExpr notEqlExpr);
+
+    R visitDeclStmt(DeclStmt declStmt);
 }
