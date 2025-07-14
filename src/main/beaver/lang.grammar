@@ -15,7 +15,8 @@
 %typeof stmts = "StmtList";
 %typeof expr = "Expr";
 %typeof stmt = "Stmt";
-%typeof elseifs = "StmtList";
+%typeof elseifs = "ElseIfList";
+%typeof elseif = "ElseIf";
 
 %goal stmts;
 
@@ -39,8 +40,12 @@ stmt
     ;
 
 elseifs
-    = ELSEIF expr.e THEN LCURLY stmts.s RCURLY elseifs.ss {: return new StmtList(new ElseIf(e, s), ss); :}
-    | ELSEIF expr.e THEN LCURLY stmts.s RCURLY {: return new StmtList(new ElseIf(e, s)); :}
+    = elseif.ei {: return new ElseIfList(ei); :}
+    | elseif.ei elseifs.eis {: return new ElseIfList(ei, eis); :}
+    ;
+
+elseif
+    = ELSEIF expr.e THEN LCURLY stmts.s RCURLY {: return new ElseIf(e, s); :}
     ;
 
 expr
