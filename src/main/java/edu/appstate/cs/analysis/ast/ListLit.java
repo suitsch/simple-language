@@ -5,17 +5,17 @@ import edu.appstate.cs.analysis.visitor.AnalysisVisitor;
 import java.util.List;
 
 public class ListLit extends Expr {
-    private BigInteger num;
+    private List list;
 
-    public IntLiteral(BigInteger num) {
-        this.num = num;
+    public ListLit(List list) {
+        this.list = list;
     }
 
-    public BigInteger getNum() {
-        return num;
+    public ListLit getList() {
+        return list;
     }
 
     public <R> R accept(AnalysisVisitor<R> analysisVisitor) {
-        return analysisVisitor.visitIntLiteral(this);
+        return analysisVisitor.visitListLit(this);
     }
 }

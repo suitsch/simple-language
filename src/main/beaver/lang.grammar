@@ -8,7 +8,7 @@
            LCURLY, RCURLY, THEN, COMMA, LBRACKET,
            RBRACKET, LPAREN, RPAREN, INTEGER, STRING,
            TRUE, FALSE, IDENTIFIER, PLUS, MULT, NOTEQL,
-           VAR;
+           VAR, NEG;
 
 %typeof INTEGER = "BigInteger";
 %typeof IDENTIFIER = "String";
@@ -21,7 +21,7 @@
 /* This can be removed once all tokens are used in a real production */
 /* START */
 %goal placeholder;
-placeholder = RETURN WHILE IN IF ELSEIF ELSE LCURLY RCURLY THEN COMMA LBRACKET RBRACKET LPAREN RPAREN STRING TRUE FALSE VAR;
+placeholder = RETURN WHILE IN IF ELSEIF ELSE LCURLY RCURLY THEN COMMA LBRACKET RBRACKET LPAREN RPAREN STRING TRUE FALSE VAR, NEG;
 /* END */
 
 stmts
@@ -42,4 +42,5 @@ expr
     | expr.a MULT expr.b {: return new MultExpr(a, b); :}
     | IDENTIFIER.i {: return new IdentExpr(i); :}
     | expr.a NOTEQL expr.b {: return new NotEqlExpr(a, b); :}
+    | NEG expr.a {: return new NegExpr (a); :}
     ;
