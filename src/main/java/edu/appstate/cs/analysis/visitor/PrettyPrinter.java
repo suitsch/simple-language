@@ -12,6 +12,15 @@ public class PrettyPrinter implements AnalysisVisitor<String> {
         return buf.toString();
     }
 
+     @Override
+    public String visitElseIfList(ElseIfList elseifList) {
+        StringBuilder sb = new StringBuilder();
+        for (ElseIf elseif : elseifList) {
+            sb.append(elseif.accept(this)).append("\n");
+        }
+        return sb.toString();
+    }
+
     @Override
     public String visitAssignStmt(AssignStmt assignStmt) {
         return String.format("%s = %s;", assignStmt.getIdent(), assignStmt.getExpr().accept(this));
@@ -51,10 +60,53 @@ public class PrettyPrinter implements AnalysisVisitor<String> {
         return String.format("%s;", exprStmt.getExpr().accept(this));
     }
 
-        @Override
-    public String visitAndExpr(AndStmt andExpr) {
+    @Override
+    public String visitAndExpr(AndExpr andExpr) {
         return String.format("%s and %s",
         andExpr.getLeft().accept(this), andExpr.getRight().accept(this));
     }
+
+    @Override
+    public String visitElseIf(ElseIf elseIf) {
+    return String.format("else-if %s then {\n%s}\n", 
+        elseIf.getCondition().accept(this), 
+        elseIf.getBody().accept(this));
+}
+
+
+@Override
+public String visitIfStmt(IfStmt ifStmt) {
+    StringBuilder sb = new StringBuilder();
+
+    sb.append(String.format("if %s then {\n%s}\n",
+        ifStmt.getCondition().accept(this),
+        ifStmt.getThenBody().accept(this)));
+
+
+    if (ifStmt.getElseIfs() != null) {
+        sb.append(ifStmt.getElseIfs().accept(this));
+    }
+
+    return sb.toString();
+}
+
+
+
+@Override
+public String visitIfElseifStmt(IfElseIfStmt ifElseIfStmt) {
+    StringBuilder ifelif = new StringBuilder();
+
+    ifelif.append(String.format("if %s then {\n%s}\n",
+        ifElseIfStmt.getCondition().accept(this),
+        ifElseIfStmt.getStmts().accept(this)));
+
+    if (ifElseIfStmt.getElseIfs() != null) {
+        ifelif.append(ifElseIfStmt.getElseIfs().accept(this));
+    }
+
+    return ifelif.toString();
+}
+
+
 
 }

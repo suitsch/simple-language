@@ -2,12 +2,12 @@ package edu.appstate.cs.analysis.ast;
 
 import edu.appstate.cs.analysis.visitor.AnalysisVisitor;
 
-public class AndStmt extends Stmt {
+public class AndExpr extends Stmt {
     private Expr left;
     private Expr right;
 
     
-    public AndStmt(Expr right, Expr left) {
+    public AndExpr(Expr right, Expr left) {
         this.left = left;
         this.right = right;
     }
@@ -17,7 +17,7 @@ public class AndStmt extends Stmt {
         return left;
     }
 
-    public StmtList getRight() {
+    public Expr getRight() {
         return right;
     }
 

@@ -3,23 +3,28 @@ package edu.appstate.cs.analysis.ast;
 import edu.appstate.cs.analysis.visitor.AnalysisVisitor;
 
 public class IfElseIfStmt extends Stmt { //continue working
-    private Expr expr;
+    private Expr condition;
+    private StmtList stmts;
     private ElseIfList elseifs;
 
-    public IfElseIfStmt( Expr expr1, Expr expr, ElseIfList elseifs,StmtList ss, StmtList) {
-        this.expr1 = expr1;
+    public IfElseIfStmt( Expr condition, StmtList stmts, ElseIfList elseifs) {
+        this.condition = condition;
+        this.stmts = stmts;
         this.elseifs = elseifs;
     }
 
-
-
-    public Expr getExpr1() {
-        return expr1;
+    public Expr getCondition() {
+        return condition;
     }
 
-    public Expr getExpr2()
+    public StmtList getStmts()
     {
-        return expr2;
+        return stmts;
+    }
+
+    public ElseIfList getElseIfs()
+    {
+        return elseifs;
     }
 
 
