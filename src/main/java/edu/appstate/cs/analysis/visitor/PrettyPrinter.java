@@ -47,6 +47,11 @@ public class PrettyPrinter implements AnalysisVisitor<String> {
     }
 
     @Override
+    public String visitEqualExpr(EqualExpr equalExpr) {
+        return String.format("%s == %s", equalExpr.getLeft().accept(this), equalExpr.getRight().accept(this));
+    }
+
+    @Override
     public String visitIdentExpr(IdentExpr identExpr) {
         return identExpr.getIdent();
     }
@@ -54,10 +59,17 @@ public class PrettyPrinter implements AnalysisVisitor<String> {
     @Override
     public String visitForStmt(ForStmt forStmt) {
         return String.format("for %s in %s {\n %s\n}",
-            forStmt.getIdent(),
-            forStmt.getExpr().accept(this),
-            forStmt.getStmts().accept(this)
-        );
+                forStmt.getIdent(),
+                forStmt.getExpr().accept(this),
+                forStmt.getStmts().accept(this));
+    }
+
+    @Override
+    public String visitIfElseStmt(IfElseStmt ieStmt) {
+        return String.format("if %s then {\n %s\n}\n else {\n %s \n}",
+                ieStmt.getExpr(),
+                ieStmt.getStmts1().accept(this),
+                ieStmt.getStmts2().accept(this));
     }
 
     @Override

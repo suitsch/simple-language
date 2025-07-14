@@ -36,6 +36,7 @@ stmt
     | FOR IDENTIFIER.i IN expr.e LCURLY stmts.ss RCURLY {: return new ForStmt(i, e, ss); :}
     | expr.e SEMI {: return new ExprStmt(e); :}
     | VAR IDENTIFIER.i SEMI {: return new DeclStmt(i, null); :}
+    | IF expr.e THEN LCURLY stmts.ss RCURLY ELSE LCURLY stmts.sss RCURLY {: return new IfStmt(e, ss, null, sss); :}
     | IF expr.e THEN LCURLY stmts.ss RCURLY elseifs.es ELSE LCURLY stmts.s2 RCURLY {: return new IfStmt(e, ss, es, s2); :}
     ;
 
@@ -52,6 +53,7 @@ expr
     = INTEGER.n {: return new IntLiteral(n); :}
     | expr.a PLUS expr.b {: return new PlusExpr(a, b); :}
     | expr.a MULT expr.b {: return new MultExpr(a, b); :}
+    | expr.a ASSIGN ASSIGN expr.b {: return new EqualExpr(a, b); :}
     | IDENTIFIER.i {: return new IdentExpr(i); :}
     | expr.a NOTEQL expr.b {: return new NotEqlExpr(a, b); :}
     | NOT expr.a {: return new NotExpr(a); :}
