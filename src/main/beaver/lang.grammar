@@ -14,6 +14,8 @@
 %typeof stmts = "StmtList";
 %typeof expr = "Expr";
 %typeof stmt = "Stmt";
+%typeof elseif = "Elseif";
+%typeof elseifs = "ElseIfList";
 
 %goal stmts;
 
@@ -28,11 +30,22 @@ stmts
     | stmt.s stmts.ss {: return new StmtList(s, ss); :}
     ;
 
+elseifs
+    = elseifs.s {: return new ElseIf(s); :}
+    | elseif.s elseifs.ss {: return new ElseIfList(s,ss); :}
+    ;
+
+
+elseif
+    = ELSEIF expr LCURLY stmts RCURLY {: return new Elseif(e,s)}
+    ;
+
 stmt
     = IDENTIFIER.i ASSIGN expr.e SEMI {: return new AssignStmt(i, e); :}
     | FOR IDENTIFIER.i IN expr.e LCURLY stmts.ss RCURLY {: return new ForStmt(i, e, ss); :}
     | expr.e SEMI {: return new ExprStmt(e); :}
-    | IF expr.cond LCURLY stmts.ss RCURLY ELSEIF 
+    | If the-if-stuff the-else-if
+    | IF expr.e THEN LCURLY stmts.ss RCURLY elseifs.ee  {: return new IfElseIfStmt(e,ss,ee)} 
     ;
 
 expr
