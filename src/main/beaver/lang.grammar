@@ -31,20 +31,20 @@ stmts
     ;
 
 elseifs
-    = elseifs.s {: return new ElseIfStmt(s); :}
+    = elseif.s {: return new ElseIfList(s); :}
     | elseif.s elseifs.ss {: return new ElseIfList(s,ss); :}
     ;
 
 
 elseif
-    = ELSEIF expr LCURLY stmts RCURLY {: return new Elseif(e,s)}
+    = ELSEIF expr.e LCURLY stmts.s RCURLY {: return new ElseIf(e,s); :}
     ;
 
 stmt
     = IDENTIFIER.i ASSIGN expr.e SEMI {: return new AssignStmt(i, e); :}
     | FOR IDENTIFIER.i IN expr.e LCURLY stmts.ss RCURLY {: return new ForStmt(i, e, ss); :}
     | expr.e SEMI {: return new ExprStmt(e); :}
-    | IF expr.e THEN LCURLY stmts.ss RCURLY elseifs.es {: return new IfStmt(e,ss,es)}
+    | IF expr.e THEN LCURLY stmts.ss RCURLY elseifs.es {: return new IfStmt(e,ss,es); :}
     ;
 
 expr
