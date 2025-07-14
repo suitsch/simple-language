@@ -32,11 +32,13 @@ stmt
     = IDENTIFIER.i ASSIGN expr.e SEMI {: return new AssignStmt(i, e); :}
     | FOR IDENTIFIER.i IN expr.e LCURLY stmts.ss RCURLY {: return new ForStmt(i, e, ss); :}
     | expr.e SEMI {: return new ExprStmt(e); :}
+    | IF expr.e THEN LCURLY stmts.ss RCURLY ELSE LCURLY stmts.sss RCURLY {: return new IfElseStmt(e, ss, ss); :}
     ;
 
 expr
     = INTEGER.n {: return new IntLiteral(n); :}
     | expr.a PLUS expr.b {: return new PlusExpr(a, b); :}
     | expr.a MULT expr.b {: return new MultExpr(a, b); :}
+    | expr.a ASSIGN ASSIGN expr.b {: return new EqualExpr(a, b); :}
     | IDENTIFIER.i {: return new IdentExpr(i); :}
     ;
