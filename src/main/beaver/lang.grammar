@@ -58,4 +58,5 @@ expr
     | IDENTIFIER.i {: return new IdentExpr(i); :}
     | expr.a NOTEQL expr.b {: return new NotEqlExpr(a, b); :}
     | NOT expr.a {: return new NotExpr(a); :}
+    | expr.a ASSIGN ASSIGN expr.b {: return new EqualExpr(a, b); :}
     ;
