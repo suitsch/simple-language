@@ -13,6 +13,15 @@ public class PrettyPrinter implements AnalysisVisitor<String> {
     }
 
     @Override
+    public String visitElseIfList(ElseIfList elseIfList) {
+        StringBuffer buf = new StringBuffer();
+        for (ElseIf ei : elseIfList) {
+            buf.append(ei.accept(this)).append("\n");
+        }
+        return buf.toString();
+    }
+
+    @Override
     public String visitAssignStmt(AssignStmt assignStmt) {
         return String.format("%s = %s;", assignStmt.getIdent(), assignStmt.getExpr().accept(this));
     }

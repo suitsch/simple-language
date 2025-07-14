@@ -5,10 +5,10 @@ import edu.appstate.cs.analysis.visitor.AnalysisVisitor;
 public class IfStmt extends Stmt {
     private Expr condition;
     private StmtList thenBody;
-    private StmtList elseIfs;
+    private ElseIfList elseIfs;
     private StmtList elseBody;
 
-    public IfStmt(Expr condition, StmtList thenBody, StmtList elseIfs, StmtList elseBody) {
+    public IfStmt(Expr condition, StmtList thenBody, ElseIfList elseIfs, StmtList elseBody) {
         this.condition = condition;
         this.thenBody = thenBody;
         this.elseIfs = elseIfs;
@@ -23,7 +23,7 @@ public class IfStmt extends Stmt {
         return thenBody;
     }
 
-    public StmtList getElseIfs() {
+    public ElseIfList getElseIfs() {
         return elseIfs;
     }
 
