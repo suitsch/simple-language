@@ -103,7 +103,7 @@ public class PrettyPrinter implements AnalysisVisitor<String> {
         }
     }
 
-     @Override
+    @Override
     public String visitElseIf(ElseIf elseIf) {
         return String.format("else-if %s then {\n%s}\n", 
                 elseIf.getCondition().accept(this), 

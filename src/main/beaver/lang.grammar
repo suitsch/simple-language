@@ -39,6 +39,7 @@ stmt
     | expr.e SEMI {: return new ExprStmt(e); :}
     | VAR IDENTIFIER.i SEMI {: return new DeclStmt(i, null); :}
     | IF expr.e THEN LCURLY stmts.ss RCURLY elseifs.es ELSE LCURLY stmts.s2 RCURLY {: return new IfStmt(e, ss, es, s2); :}
+    | IF expr.e THEN LCURLY stmts.ss RCURLY ELSE LCURLY stmts.sss RCURLY {: return new IfStmt(e, ss, null, sss); :}
     ;
 
 elseifs
@@ -53,7 +54,6 @@ elseif
 expr
     = INTEGER.n {: return new IntLiteral(n); :}
     | expr.a PLUS expr.b {: return new PlusExpr(a, b); :}
-    | expr.a SUB expr.b {: return new SubExpr(a, b); :}
     | expr.a MULT expr.b {: return new MultExpr(a, b); :}
     | expr.a DIV expr.b {: return new DivExpr(a, b); :}
     | IDENTIFIER.i {: return new IdentExpr(i); :}

@@ -63,7 +63,6 @@ Identifier     = [:jletter:] [:jletterdigit:]*
 	"("          { return newToken(Terminals.LPAREN); }
 	")"          { return newToken(Terminals.RPAREN); }
 	"+"          { return newToken(Terminals.PLUS); }
-	"-"          { return newToken(Terminals.SUB); }
 	"*"          { return newToken(Terminals.MULT); }
 	"/"          { return newToken(Terminals.DIV); }
 	"!="         { return newToken(Terminals.NOTEQL); }
