@@ -7,7 +7,7 @@
            IN, IF, ELSEIF, ELSE, ASSIGN, SEMI,
            LCURLY, RCURLY, THEN, COMMA, LBRACKET,
            RBRACKET, LPAREN, RPAREN, INTEGER, STRING,
-           TRUE, FALSE, IDENTIFIER, PLUS, MULT;
+           TRUE, FALSE, IDENTIFIER, PLUS, MULT,AND;
 
 %typeof INTEGER = "BigInteger";
 %typeof IDENTIFIER = "String";
@@ -32,11 +32,13 @@ stmt
     = IDENTIFIER.i ASSIGN expr.e SEMI {: return new AssignStmt(i, e); :}
     | FOR IDENTIFIER.i IN expr.e LCURLY stmts.ss RCURLY {: return new ForStmt(i, e, ss); :}
     | expr.e SEMI {: return new ExprStmt(e); :}
+    | IF expr.cond LCURLY stmts.ss RCURLY ELSEIF 
     ;
 
 expr
     = INTEGER.n {: return new IntLiteral(n); :}
     | expr.a PLUS expr.b {: return new PlusExpr(a, b); :}
     | expr.a MULT expr.b {: return new MultExpr(a, b); :}
+    | expr.a AND expr.b {: return new AndExpr(a,b); :}
     | IDENTIFIER.i {: return new IdentExpr(i); :}
     ;

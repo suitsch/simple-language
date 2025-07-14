@@ -12,4 +12,5 @@ public interface AnalysisVisitor<R> {
     R visitIdentExpr(IdentExpr identExpr);
     R visitForStmt(ForStmt forStmt);
     R visitExprStmt(ExprStmt exprStmt);
+    R visitAndExpr(AndExpr andExpr)
 }
