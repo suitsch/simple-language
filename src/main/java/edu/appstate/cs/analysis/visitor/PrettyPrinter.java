@@ -47,6 +47,10 @@ public class PrettyPrinter implements AnalysisVisitor<String> {
     }
 
     @Override
+    public String visitDivExpr(DivExpr divExpr) {
+        return String.format("(%s / %s)", divExpr.getLeft().accept(this), divExpr.getRight().accept(this));
+    }
+
     public String visitEqualExpr(EqualExpr equalExpr) {
         return String.format("%s == %s", equalExpr.getLeft().accept(this), equalExpr.getRight().accept(this));
     }
@@ -99,7 +103,7 @@ public class PrettyPrinter implements AnalysisVisitor<String> {
         }
     }
 
-     @Override
+    @Override
     public String visitElseIf(ElseIf elseIf) {
         return String.format("else-if %s then {\n%s}\n", 
                 elseIf.getCondition().accept(this), 

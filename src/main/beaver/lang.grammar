@@ -4,10 +4,10 @@
 %import "java.math.BigInteger";
 
 %terminals FOR, RETURN, WHILE,
-           IN, IF, ELSEIF, ELSE, ASSIGN, SEMI,
+           IN, ELSEIF, ELSE, ASSIGN, SEMI,
            LCURLY, RCURLY, THEN, COMMA, LBRACKET,
            RBRACKET, LPAREN, RPAREN, INTEGER, STRING,
-           TRUE, FALSE, IDENTIFIER, PLUS, MULT, NOTEQL,
+           TRUE, FALSE, IDENTIFIER, PLUS, MULT, NOTEQL, DIV, SUB, IF,
            VAR, NOT;
 
 %typeof INTEGER = "BigInteger";
@@ -34,6 +34,8 @@ stmts
 stmt
     = IDENTIFIER.i ASSIGN expr.e SEMI {: return new AssignStmt(i, e); :}
     | FOR IDENTIFIER.i IN expr.e LCURLY stmts.ss RCURLY {: return new ForStmt(i, e, ss); :}
+    | IF expr.e THEN LCURLY stmts.ss RCURLY {: return new IfStmt(e, ss, null, null); :}
+    | WHILE expr.e LCURLY stmts.ss RCURLY {: return new WhileStmt(e, ss); :}
     | expr.e SEMI {: return new ExprStmt(e); :}
     | VAR IDENTIFIER.i SEMI {: return new DeclStmt(i, null); :}
     | IF expr.e THEN LCURLY stmts.ss RCURLY ELSE LCURLY stmts.sss RCURLY {: return new IfStmt(e, ss, null, sss); :}
@@ -57,4 +59,5 @@ expr
     | IDENTIFIER.i {: return new IdentExpr(i); :}
     | expr.a NOTEQL expr.b {: return new NotEqlExpr(a, b); :}
     | NOT expr.a {: return new NotExpr(a); :}
+    | expr.a DIV expr.b {: return new DivExpr(a, b); :}
     ;
