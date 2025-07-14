@@ -53,6 +53,7 @@ Identifier     = [:jletter:] [:jletterdigit:]*
 	"not"        { return newToken(Terminals.NOT); }
 	"in"         { return newToken(Terminals.IN); }
 	"if"         { return newToken(Terminals.IF); }
+	"=="         { return newToken(Terminals.EQUAL); }
 	"="          { return newToken(Terminals.ASSIGN); }
 	";"          { return newToken(Terminals.SEMI); }
 	"{"          { return newToken(Terminals.LCURLY); }
