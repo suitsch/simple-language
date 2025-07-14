@@ -62,7 +62,7 @@ public class PrettyPrinter implements AnalysisVisitor<String> {
 
     @Override
     public String visitAndExpr(AndExpr andExpr) {
-        return String.format("%s and %s",
+        return String.format("(%s and %s)",
         andExpr.getLeft().accept(this), andExpr.getRight().accept(this));
     }
 
