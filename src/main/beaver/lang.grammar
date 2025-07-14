@@ -4,10 +4,10 @@
 %import "java.math.BigInteger";
 
 %terminals FOR, RETURN, WHILE,
-           IN, IF, ELSEIF, ELSE, ASSIGN, SEMI,
+           IN, ELSEIF, ELSE, ASSIGN, SEMI,
            LCURLY, RCURLY, THEN, COMMA, LBRACKET,
            RBRACKET, LPAREN, RPAREN, INTEGER, STRING,
-           TRUE, FALSE, IDENTIFIER, PLUS, MULT;
+           TRUE, FALSE, IDENTIFIER, PLUS, MULT, DIV, IF;
 
 %typeof INTEGER = "BigInteger";
 %typeof IDENTIFIER = "String";
@@ -31,6 +31,7 @@ stmts
 stmt
     = IDENTIFIER.i ASSIGN expr.e SEMI {: return new AssignStmt(i, e); :}
     | FOR IDENTIFIER.i IN expr.e LCURLY stmts.ss RCURLY {: return new ForStmt(i, e, ss); :}
+    | IF expr.e THEN LCURLY stmts.ss RCURLY {: return new IfStmt(e, ss); :}
     | expr.e SEMI {: return new ExprStmt(e); :}
     ;
 
@@ -38,5 +39,6 @@ expr
     = INTEGER.n {: return new IntLiteral(n); :}
     | expr.a PLUS expr.b {: return new PlusExpr(a, b); :}
     | expr.a MULT expr.b {: return new MultExpr(a, b); :}
+    | expr.a DIV expr.b {: return new DivExpr(a, b); :}
     | IDENTIFIER.i {: return new IdentExpr(i); :}
     ;
