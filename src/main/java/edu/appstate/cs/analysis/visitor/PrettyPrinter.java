@@ -75,4 +75,18 @@ public class PrettyPrinter implements AnalysisVisitor<String> {
     public String visitExprStmt(ExprStmt exprStmt) {
         return String.format("%s;", exprStmt.getExpr().accept(this));
     }
+
+    @Override
+    public String visitNotEqlExpr(NotEqlExpr notEqlExpr) {
+        return String.format("(%s != %s)", notEqlExpr.getLeft().accept(this), notEqlExpr.getRight().accept(this));
+    }
+
+    @Override
+    public String visitDeclStmt(DeclStmt declStmt) {
+        if (declStmt.getExpr() != null) {
+            return String.format("var %s = %s;", declStmt.getIdent(), declStmt.getExpr().accept(this));
+        } else {
+            return String.format("var %s;", declStmt.getIdent());
+        }
+    }
 }
