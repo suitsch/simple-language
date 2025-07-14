@@ -14,4 +14,6 @@ public interface AnalysisVisitor<R> {
     R visitForStmt(ForStmt forStmt);
     R visitWhileStmt(WhileStmt whileStmt);
     R visitExprStmt(ExprStmt exprStmt);
+    R visitNotEqlExpr(NotEqlExpr notEqlExpr);
+    R visitDeclStmt(DeclStmt declStmt);
 }
