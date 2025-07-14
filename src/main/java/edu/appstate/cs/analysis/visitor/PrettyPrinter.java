@@ -71,30 +71,32 @@ public class PrettyPrinter implements AnalysisVisitor<String> {
     return String.format("else-if %s then {\n%s}\n", 
         elseIf.getCondition().accept(this), 
         elseIf.getBody().accept(this));
-}
+    }
 
 
-@Override
-public String visitIfStmt(IfStmt ifStmt) {
-    StringBuilder sb = new StringBuilder();
+
+    @Override
+    public String visitIfStmt(IfStmt ifStmt) {
+        StringBuilder sb = new StringBuilder();
 
     sb.append(String.format("if %s then {\n%s}\n",
         ifStmt.getCondition().accept(this),
         ifStmt.getThenBody().accept(this)));
 
 
-    if (ifStmt.getElseIfs() != null) {
-        sb.append(ifStmt.getElseIfs().accept(this));
+        if (ifStmt.getElseIfs() != null) {
+            sb.append(ifStmt.getElseIfs().accept(this));
+        }
+
+        return sb.toString();
     }
 
-    return sb.toString();
-}
 
 
+    @Override
+    public String visitIfElseifStmt(IfElseIfStmt ifElseIfStmt) {
 
-@Override
-public String visitIfElseifStmt(IfElseIfStmt ifElseIfStmt) {
-    StringBuilder ifelif = new StringBuilder();
+        StringBuilder ifelif = new StringBuilder();
 
     ifelif.append(String.format("if %s then {\n%s}\n",
         ifElseIfStmt.getCondition().accept(this),
@@ -102,10 +104,11 @@ public String visitIfElseifStmt(IfElseIfStmt ifElseIfStmt) {
 
     if (ifElseIfStmt.getElseIfs() != null) {
         ifelif.append(ifElseIfStmt.getElseIfs().accept(this));
-    }
+        
+        }
 
-    return ifelif.toString();
-}
+        return ifelif.toString();
+    }
 
 
 
