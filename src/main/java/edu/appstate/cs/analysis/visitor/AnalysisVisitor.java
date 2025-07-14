@@ -16,4 +16,8 @@ public interface AnalysisVisitor<R> {
     R visitExprStmt(ExprStmt exprStmt);
     R visitNotEqlExpr(NotEqlExpr notEqlExpr);
     R visitDeclStmt(DeclStmt declStmt);
+    R visitIfStmt(IfStmt ifStmt);   
+    R visitElseIf(ElseIf elseIf);
+    R visitNotExpr(NotExpr notExpr);
+
 }
