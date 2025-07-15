@@ -8,7 +8,7 @@
            LCURLY, RCURLY, THEN, COMMA, LBRACKET,
            RBRACKET, LPAREN, RPAREN, INTEGER, STRING,
            TRUE, FALSE, IDENTIFIER, PLUS, MULT, NOTEQL, DIV, SUB, IF,
-           VAR, NOT, EQUAL;
+           VAR, NOT, EQUAL, OR;
 
 %typeof INTEGER = "BigInteger";
 %typeof IDENTIFIER = "String";
@@ -23,7 +23,7 @@
 /* This can be removed once all tokens are used in a real production */
 /* START */
 %goal placeholder;
-placeholder = RETURN WHILE IN IF ELSEIF ELSE LCURLY RCURLY THEN COMMA LBRACKET RBRACKET LPAREN RPAREN STRING TRUE FALSE VAR;
+placeholder = COMMA LBRACKET RBRACKET LPAREN RPAREN STRING TRUE FALSE;
 /* END */
 
 stmts
@@ -35,6 +35,7 @@ stmt
     = IDENTIFIER.i ASSIGN expr.e SEMI {: return new AssignStmt(i, e); :}
     | FOR IDENTIFIER.i IN expr.e LCURLY stmts.ss RCURLY {: return new ForStmt(i, e, ss); :}
     | WHILE expr.e LCURLY stmts.ss RCURLY {: return new WhileStmt(e, ss); :}
+    | RETURN expr.e SEMI {: return new ReturnStmt(e); :}
     | expr.e SEMI {: return new ExprStmt(e); :}
     | VAR IDENTIFIER.i SEMI {: return new DeclStmt(i, null); :}
     | IF expr.e THEN LCURLY stmts.ss RCURLY {: return new IfStmt(e, ss, null, null); :}
@@ -56,6 +57,7 @@ expr
     | expr.a PLUS expr.b {: return new PlusExpr(a, b); :}
     | expr.a MULT expr.b {: return new MultExpr(a, b); :}
     | expr.a EQUAL expr.b {: return new EqualExpr(a, b); :}
+    | expr.a OR expr.b {: return new OrExpr(a, b); :}
     | IDENTIFIER.i {: return new IdentExpr(i); :}
     | expr.a NOTEQL expr.b {: return new NotEqlExpr(a, b); :}
     | NOT expr.a {: return new NotExpr(a); :}

@@ -51,6 +51,7 @@ Identifier     = [:jletter:] [:jletterdigit:]*
 	"True"       { return newToken(Terminals.TRUE); }
 	"for"        { return newToken(Terminals.FOR); }
 	"not"        { return newToken(Terminals.NOT); }
+	"or"		 { return newToken(Terminals.OR); }
 	"in"         { return newToken(Terminals.IN); }
 	"if"         { return newToken(Terminals.IF); }
 	"=="         { return newToken(Terminals.EQUAL); }

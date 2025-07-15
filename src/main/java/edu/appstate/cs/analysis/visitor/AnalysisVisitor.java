@@ -41,4 +41,8 @@ public interface AnalysisVisitor<R> {
     R visitElseIf(ElseIf elseIf);
 
     R visitNotExpr(NotExpr notExpr);
+
+    R visitReturnStmt(ReturnStmt returnStmt);
+
+    R visitOrExpr(OrExpr orExpr);
 }
