@@ -131,4 +131,15 @@ public class PrettyPrinter implements AnalysisVisitor<String> {
     public String visitNotExpr(NotExpr notExpr) {
         return String.format("not %s", notExpr.getExpr().accept(this));
     }
+
+    @Override
+    public String visitOrExpr(OrExpr orExpr) {
+        return String.format("%s or %s",
+            orExpr.getLeftExpr(), orExpr.getRightExpr());
+    }
+
+    @Override
+    public String visitReturnStmt(ReturnStmt returnStmt) {
+        return String.format("return %s;", returnStmt.getRetExpr());
+    }
 }
