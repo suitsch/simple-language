@@ -8,6 +8,10 @@ public interface AnalysisVisitor<R> {
 
     R visitElseIfList(ElseIfList elseIfList);
 
+    R visitElseIf(ElseIf elseIf);
+
+    R visitIfStmt(IfStmt ifStmt);
+
     R visitAssignStmt(AssignStmt assignStmt);
 
     R visitIntLiteral(IntLiteral intLiteral);
@@ -30,19 +34,15 @@ public interface AnalysisVisitor<R> {
 
     R visitNotEqlExpr(NotEqlExpr notEqlExpr);
 
-    R visitIfElseStmt(IfElseStmt ifElseStmt);
-
     R visitEqualExpr(EqualExpr equalExpr);
 
     R visitDeclStmt(DeclStmt declStmt);
-
-    R visitIfStmt(IfStmt ifStmt);
-
-    R visitElseIf(ElseIf elseIf);
 
     R visitNotExpr(NotExpr notExpr);
 
     R visitReturnStmt(ReturnStmt returnStmt);
 
     R visitOrExpr(OrExpr orExpr);
+
+    R visitAndExpr(AndExpr andExpr);
 }

@@ -8,7 +8,7 @@
            LCURLY, RCURLY, THEN, COMMA, LBRACKET,
            RBRACKET, LPAREN, RPAREN, INTEGER, STRING,
            TRUE, FALSE, IDENTIFIER, PLUS, MULT, NOTEQL, DIV, SUB, IF,
-           VAR, NOT, EQUAL, OR;
+           VAR, NOT, EQUAL, OR, AND;
 
 %typeof INTEGER = "BigInteger";
 %typeof IDENTIFIER = "String";
@@ -18,12 +18,20 @@
 %typeof elseifs = "ElseIfList";
 %typeof elseif = "ElseIf";
 
+%left RPAREN;
+%right NOT;
+%left MULT, DIV;
+%left PLUS, SUB;
+%left EQUAL, NOTEQL;
+%left OR;
+%left AND;
+
 %goal stmts;
 
 /* This can be removed once all tokens are used in a real production */
 /* START */
 %goal placeholder;
-placeholder = COMMA LBRACKET RBRACKET LPAREN RPAREN STRING TRUE FALSE;
+placeholder = COMMA LBRACKET RBRACKET LPAREN RPAREN STRING TRUE FALSE SUB;
 /* END */
 
 stmts
@@ -40,6 +48,7 @@ stmt
     | VAR IDENTIFIER.i SEMI {: return new DeclStmt(i, null); :}
     | IF expr.e THEN LCURLY stmts.ss RCURLY {: return new IfStmt(e, ss, null, null); :}
     | IF expr.e THEN LCURLY stmts.ss RCURLY ELSE LCURLY stmts.sss RCURLY {: return new IfStmt(e, ss, null, sss); :}
+    | IF expr.e THEN LCURLY stmts.ss RCURLY elseifs.es {: return new IfStmt(e, ss, es, null); :}
     | IF expr.e THEN LCURLY stmts.ss RCURLY elseifs.es ELSE LCURLY stmts.s2 RCURLY {: return new IfStmt(e, ss, es, s2); :}
     ;
 
@@ -58,6 +67,7 @@ expr
     | expr.a MULT expr.b {: return new MultExpr(a, b); :}
     | expr.a EQUAL expr.b {: return new EqualExpr(a, b); :}
     | expr.a OR expr.b {: return new OrExpr(a, b); :}
+    | expr.a AND expr.b {: return new AndExpr(a,b); :}
     | IDENTIFIER.i {: return new IdentExpr(i); :}
     | expr.a NOTEQL expr.b {: return new NotEqlExpr(a, b); :}
     | NOT expr.a {: return new NotExpr(a); :}
