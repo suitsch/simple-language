@@ -45,4 +45,12 @@ public interface AnalysisVisitor<R> {
     R visitOrExpr(OrExpr orExpr);
 
     R visitAndExpr(AndExpr andExpr);
+
+    R visitLtExpr(LtExpr ltExpr);
+
+    R visitLtEqExpr(LtEqExpr ltEqExpr);
+
+    R visitGtExpr(GtExpr gtExpr);
+
+    R visitGtEqExpr(GtEqExpr gtEqExpr);
 }

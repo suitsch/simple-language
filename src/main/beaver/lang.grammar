@@ -6,6 +6,7 @@
 %terminals FOR, RETURN, WHILE,
            IN, ELSEIF, ELSE, ASSIGN, SEMI,
            LCURLY, RCURLY, THEN, COMMA, LBRACKET,
+           LT, LTEQ, GT, GTEQ,
            RBRACKET, LPAREN, RPAREN, INTEGER, STRING,
            TRUE, FALSE, IDENTIFIER, PLUS, MULT, NOTEQL, DIV, SUB, IF,
            VAR, NOT, EQUAL, OR, AND;
@@ -22,6 +23,7 @@
 %right NOT;
 %left MULT, DIV;
 %left PLUS, SUB;
+%left GTEQ, GT, LTEQ, LT;
 %left EQUAL, NOTEQL;
 %left OR;
 %left AND;
@@ -72,4 +74,8 @@ expr
     | expr.a NOTEQL expr.b {: return new NotEqlExpr(a, b); :}
     | NOT expr.a {: return new NotExpr(a); :}
     | expr.a DIV expr.b {: return new DivExpr(a, b); :}
+    | expr.a LT expr.b {: return new LtExpr(a, b); :}
+    | expr.a LTEQ expr.b {: return new LtEqExpr(a, b); :}
+    | expr.a GT expr.b {: return new GtExpr(a, b); :}
+    | expr.a GTEQ expr.b {: return new GtEqExpr(a, b); :}
     ;

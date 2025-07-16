@@ -101,6 +101,26 @@ public class PrettyPrinter implements AnalysisVisitor<String> {
     }
 
     @Override
+    public String visitLtExpr(LtExpr ltExpr) {
+        return String.format("(%s < %s)", ltExpr.getLeft().accept(this), ltExpr.getRight().accept(this));
+    }
+
+    @Override
+    public String visitLtEqExpr(LtEqExpr ltEqExpr) {
+        return String.format("(%s <= %s)", ltEqExpr.getLeft().accept(this), ltEqExpr.getRight().accept(this));
+    }
+
+    @Override
+    public String visitGtExpr(GtExpr gtExpr) {
+        return String.format("(%s > %s)", gtExpr.getLeft().accept(this), gtExpr.getRight().accept(this));
+    }
+
+    @Override
+    public String visitGtEqExpr(GtEqExpr gtEqExpr) {
+        return String.format("(%s >= %s)", gtEqExpr.getLeft().accept(this), gtEqExpr.getRight().accept(this));
+    }
+
+    @Override
     public String visitElseIf(ElseIf elseIf) {
         return String.format("else-if %s then {\n%s}\n",
                 elseIf.getCondition().accept(this),

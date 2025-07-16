@@ -19,52 +19,58 @@ public class LanguageParser extends Parser {
 		static public final short MULT = 4;
 		static public final short DIV = 5;
 		static public final short PLUS = 6;
-		static public final short EQUAL = 7;
-		static public final short NOTEQL = 8;
-		static public final short IF = 9;
-		static public final short FOR = 10;
-		static public final short WHILE = 11;
-		static public final short VAR = 12;
-		static public final short RETURN = 13;
-		static public final short OR = 14;
-		static public final short AND = 15;
-		static public final short LCURLY = 16;
-		static public final short RCURLY = 17;
-		static public final short SEMI = 18;
-		static public final short THEN = 19;
-		static public final short ELSE = 20;
-		static public final short ELSEIF = 21;
-		static public final short COMMA = 22;
-		static public final short LBRACKET = 23;
-		static public final short RBRACKET = 24;
-		static public final short LPAREN = 25;
-		static public final short RPAREN = 26;
-		static public final short STRING = 27;
-		static public final short TRUE = 28;
-		static public final short FALSE = 29;
-		static public final short SUB = 30;
-		static public final short IN = 31;
-		static public final short ASSIGN = 32;
+		static public final short LT = 7;
+		static public final short LTEQ = 8;
+		static public final short GT = 9;
+		static public final short GTEQ = 10;
+		static public final short EQUAL = 11;
+		static public final short NOTEQL = 12;
+		static public final short IF = 13;
+		static public final short FOR = 14;
+		static public final short WHILE = 15;
+		static public final short VAR = 16;
+		static public final short RETURN = 17;
+		static public final short OR = 18;
+		static public final short AND = 19;
+		static public final short LCURLY = 20;
+		static public final short RCURLY = 21;
+		static public final short SEMI = 22;
+		static public final short THEN = 23;
+		static public final short ELSE = 24;
+		static public final short ELSEIF = 25;
+		static public final short COMMA = 26;
+		static public final short LBRACKET = 27;
+		static public final short RBRACKET = 28;
+		static public final short LPAREN = 29;
+		static public final short RPAREN = 30;
+		static public final short STRING = 31;
+		static public final short TRUE = 32;
+		static public final short FALSE = 33;
+		static public final short SUB = 34;
+		static public final short IN = 35;
+		static public final short ASSIGN = 36;
 	}
 	static public class AltGoals {
-		static public final short placeholder = 33;
+		static public final short placeholder = 37;
 	}
 
 	static final ParsingTables PARSING_TABLES = new ParsingTables(
-		"U9o5bKjCKq4KXlyMh42b52W85H7ROa4KdyMtuWFVBn9ZubPTk3Gc9YvCSAMkNBWmxbseCJ7" +
-		"HI69YGgAeQAA4nAN6615H54LyFyV$pfnBfxKNB$dc$FVCEVCuSwS0FZ$2Y261LcmHjHGpC1" +
-		"kBC3#jb48bwX115Mej5KKD9Y0FvLhDbFmKIX3IKUcHqZacPXqswPmvEMCoPzZCs8LQvQi$Q" +
-		"F6CCoClHy1x7z8Jr#r45EMStVGM86YDkasyXJapKl1pnyMOXAZgDv7gj$J7hHbDM#RPaq8J" +
-		"nt7rt37jUbRIay8QtMwm8dTGbw82ar6DAPYAQPYEUYJHW4RCGZFcOG4MOmcMOGNQi0ghUTP" +
-		"hiHvRiH7R0Uo4Zpl8uvegH1MoDa7kfzXIG3vFEy2w5LWgnDEkv7nbMeKbFyQr9NHKEZ#TOs" +
-		"BgMKcJaoicSmOdrioGv3hAFEFCoEMiXFS#J8zfgrWlxnLMy$pjKOsDvimmEwvbzKEikubqA" +
-		"sRFwDR7kySPvrzjU#pMzjVHPlxv#2t4#6qOVAnSZFMEy2tCioxLNpTRtkzIhhRz61l5HzSO" +
-		"t2Ums$6J$UGGEKhsaeFa93bEBZaxTNBvT9CZf4JUJn3dp4xB#tboWLmcUyWLSfPS8vtaXXF" +
-		"dmgTBx1lIIswI24cGfzBNGvf92tacleUaLNIRs57oN7GVsKLUadraaDj#J$kQ72134jTFtf" +
-		"B3P5Xy0sAVa0xYv9qY8zQwEyGss$iP3pu1Iv#nz2sntM9lYxqZzgxO7h7tiiQzd$N#GEmvo" +
-		"zShzgBbw$lFUXzP#ghO2h6TEUAlMxf9x6FBrsNfTeppg5$gfnhKwWVX#IX#7sg8yFpKAy9p" +
-		"LI$Ki1Eb1Z9olu#fRxhzIhvezTcA#YJseneLzK6Dw2$4ZNZ7faRVzGRUmIHlIvmwJktyyZd" +
-		"$NnAyumdUpeJsEJP0YgGlo5yr7$7pjosWRsTCt#HiNBzVsyQ$RnRIcG==");
+		"U9oDL3jGKq4KFGa2Xez029yeo3y9440G$03nYn$0loYYfPtEsDgfXSxeqEYC3HPsDZRQMTX" +
+		"eOMbXuuoLg0Z#5H7mWwxdxTv7NY0laCovv#pTiszttzstWASVnQX40DMeHGWHb6AjKeZ1Yr" +
+		"L8nsgKgPTOWSB5BdhowB7oTA4jYQCH3OXYBuvgnqPNnpuSreuZv6utb$g73EtAX0zRN9#r4" +
+		"bdQPLezhhviv3fynvBuydLFZlfBdt6Pk0FDwC1MTBgEAO1VL15Aa8QWOqnS6SSQb8kgaEUv" +
+		"UwjG8ygif2w5DxnWTVMkwpOjyyIcX5PBGil46DQpwhRUDA$jp6vcOkZJyQ33EKYz3gtOW7P" +
+		"iHXUsOJjsOXVsOmzwUK86q8y300xXEEC9dhbqrZkJzVInejd8OJR4NKLO3J$FepLZSHANyL" +
+		"XvonL8ul3mRAUnMi4b7FLSkUMmEDbCnWLMq7ALiVhkhd9MrtAPLechhv9LMOwlYlFwHPkOo" +
+		"$URnzeNk8wngcrKYFyw8Zuchk8EMvddBSThjrDv4rSNSbstQIMEicT9R1c7LVN5sfbnHcU#" +
+		"Hk#WY7zh7yMC0PwE8iQWpWTu7zeH6Be4$HicV4gfAV80qKbq4tr45z5Bd2BE4IU9wyGT6Nk" +
+		"5Y7BidBHZ#XJnx4lxDF6EE4EC4EU9YyG5Ofgu8RwRn6FY1J47UBm4JwJ7HsHP7kFpv0lp6$" +
+		"BuYK8syeYxr3NI5sIe91vIrqgkWg5LvkgH7FVf2OckPXWaDv0VaHl9fUGcyZDoY$Z2H2l5S" +
+		"tARvEg5cndEajl94#GEUzryFsF2utPkAT0x4zytBZlqLU5hmiF28yAtX6yBtnE#B$n0#8dm" +
+		"K#Uy$8qcjkrtZab7ha1oiuvS8DL#s5$YqFPSfT9EI#BFSAofJ7BbZluSH$yGKlpKdFgZ9hJ" +
+		"wJNmYFX8VYFS4pwSQ9yQ8DyHhuXKngZvRezJRX6VzcbS$TPmbPhIQThX#24#fxw8crJVrrU" +
+		"7u0kkKHlagelo26tbJXAd3rDQT7#7j4U7T4E6t7T4vYpE8BEdBvctk8RoyqpFqznxIzy12s" +
+		"7blqlwc$rACxUa=");
 
 	static final Action RETURN2 = new Action() {
 		public Symbol reduce(Symbol[] _symbols, int offset) {
@@ -303,6 +309,42 @@ public class LanguageParser extends Parser {
 					final Symbol _symbol_b = _symbols[offset + 3];
 					final Expr b = (Expr) _symbol_b.value;
 					 return new DivExpr(a, b);
+				}
+			},
+			new Action() {	// [28] expr = expr.a LT expr.b
+				public Symbol reduce(Symbol[] _symbols, int offset) {
+					final Symbol _symbol_a = _symbols[offset + 1];
+					final Expr a = (Expr) _symbol_a.value;
+					final Symbol _symbol_b = _symbols[offset + 3];
+					final Expr b = (Expr) _symbol_b.value;
+					 return new LtExpr(a, b);
+				}
+			},
+			new Action() {	// [29] expr = expr.a LTEQ expr.b
+				public Symbol reduce(Symbol[] _symbols, int offset) {
+					final Symbol _symbol_a = _symbols[offset + 1];
+					final Expr a = (Expr) _symbol_a.value;
+					final Symbol _symbol_b = _symbols[offset + 3];
+					final Expr b = (Expr) _symbol_b.value;
+					 return new LtEqExpr(a, b);
+				}
+			},
+			new Action() {	// [30] expr = expr.a GT expr.b
+				public Symbol reduce(Symbol[] _symbols, int offset) {
+					final Symbol _symbol_a = _symbols[offset + 1];
+					final Expr a = (Expr) _symbol_a.value;
+					final Symbol _symbol_b = _symbols[offset + 3];
+					final Expr b = (Expr) _symbol_b.value;
+					 return new GtExpr(a, b);
+				}
+			},
+			new Action() {	// [31] expr = expr.a GTEQ expr.b
+				public Symbol reduce(Symbol[] _symbols, int offset) {
+					final Symbol _symbol_a = _symbols[offset + 1];
+					final Expr a = (Expr) _symbol_a.value;
+					final Symbol _symbol_b = _symbols[offset + 3];
+					final Expr b = (Expr) _symbol_b.value;
+					 return new GtEqExpr(a, b);
 				}
 			}
 		};
