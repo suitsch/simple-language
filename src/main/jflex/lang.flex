@@ -55,6 +55,7 @@ Identifier     = [:jletter:] [:jletterdigit:]*
 	"in"         { return newToken(Terminals.IN); }
 	"if"         { return newToken(Terminals.IF); }
 	"=="         { return newToken(Terminals.EQUAL); }
+	"and"		 { return newToken(Terminals.AND); }
 	"="          { return newToken(Terminals.ASSIGN); }
 	";"          { return newToken(Terminals.SEMI); }
 	"{"          { return newToken(Terminals.LCURLY); }

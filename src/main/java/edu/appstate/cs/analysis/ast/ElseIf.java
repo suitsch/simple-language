@@ -11,7 +11,7 @@ public class ElseIf extends Stmt {
         this.body = body;
     }
 
-    public Expr getCondition() { 
+    public Expr getCondition() {
         return condition; }
 
     public StmtList getBody() { 

@@ -69,18 +69,10 @@ public class PrettyPrinter implements AnalysisVisitor<String> {
     }
 
     @Override
-    public String visitIfElseStmt(IfElseStmt ieStmt) {
-        return String.format("if %s then {\n %s\n}\n else {\n %s \n}",
-                ieStmt.getExpr(),
-                ieStmt.getStmts1().accept(this),
-                ieStmt.getStmts2().accept(this));
-    }
-
-    @Override
     public String visitWhileStmt(WhileStmt whileStmt) {
         return String.format("while %s {\n %s\n}",
-            whileStmt.getExpr().accept(this),
-            whileStmt.getStmts().accept(this)
+                whileStmt.getExpr().accept(this),
+                whileStmt.getStmts().accept(this)
         );
     }
 
@@ -103,28 +95,37 @@ public class PrettyPrinter implements AnalysisVisitor<String> {
         }
     }
 
+    public String visitAndExpr(AndExpr andExpr) {
+        return String.format("(%s and %s)",
+                andExpr.getLeft().accept(this), andExpr.getRight().accept(this));
+    }
+
     @Override
     public String visitElseIf(ElseIf elseIf) {
-        return String.format("else-if %s then {\n%s}\n", 
-                elseIf.getCondition().accept(this), 
+        return String.format("else-if %s then {\n%s}\n",
+                elseIf.getCondition().accept(this),
                 elseIf.getBody().accept(this));
     }
 
     @Override
     public String visitIfStmt(IfStmt ifStmt) {
-        String result = String.format("if %s then {\n%s}", 
-            ifStmt.getCondition().accept(this), 
-            ifStmt.getThenBody().accept(this));
+        StringBuffer buf = new StringBuffer();
+
+        String result = String.format("if %s then {\n%s}",
+                ifStmt.getCondition().accept(this),
+                ifStmt.getThenBody().accept(this));
+        buf.append(result);
 
         if (ifStmt.getElseIfs() != null) {
-            result += ifStmt.getElseIfs().accept(this);
+            buf.append(ifStmt.getElseIfs().accept(this));
         }
 
         if (ifStmt.getElseBody() != null) {
-            result += String.format("else {\n%s}", ifStmt.getElseBody().accept(this));
+            buf.append(String.format("else {\n%s}", ifStmt.getElseBody().accept(this)));
         }
 
-        return result + "\n";
+        buf.append("\n");
+        return buf.toString();
     }
 
     @Override
@@ -135,7 +136,7 @@ public class PrettyPrinter implements AnalysisVisitor<String> {
     @Override
     public String visitOrExpr(OrExpr orExpr) {
         return String.format("%s or %s",
-            orExpr.getLeftExpr(), orExpr.getRightExpr());
+                orExpr.getLeftExpr(), orExpr.getRightExpr());
     }
 
     @Override

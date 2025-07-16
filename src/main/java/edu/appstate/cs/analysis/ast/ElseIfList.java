@@ -32,5 +32,4 @@ public class ElseIfList extends Symbol implements Iterable<ElseIf> {
     public <R> R accept(AnalysisVisitor<R> analysisVisitor) {
         return analysisVisitor.visitElseIfList(this);
     }
-
 }
