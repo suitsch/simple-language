@@ -65,6 +65,8 @@ elseif
 
 expr
     = INTEGER.n {: return new IntLiteral(n); :}
+    | TRUE {: return new BooleanLiteral(true); :}
+    | FALSE {: return new BooleanLiteral(false); :}
     | expr.a PLUS expr.b {: return new PlusExpr(a, b); :}
     | expr.a MULT expr.b {: return new MultExpr(a, b); :}
     | expr.a EQUAL expr.b {: return new EqualExpr(a, b); :}

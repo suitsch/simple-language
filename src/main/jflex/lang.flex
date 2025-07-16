@@ -36,6 +36,8 @@ WhiteSpace     = {LineTerminator} | [ \t\f]
 Integer        = [:digit:] [:digit:]*
 String         = [\"] [^\"]* [\"]
 Identifier     = [:jletter:] [:jletterdigit:]*
+True           = [Tt][Rr][Uu][Ee]
+False          = [Ff][Aa][Ll][Ss][Ee]
 %%
 
 {WhiteSpace}+    { /* ignore */ }
@@ -45,10 +47,10 @@ Identifier     = [:jletter:] [:jletterdigit:]*
 	"else-if"    { return newToken(Terminals.ELSEIF); }
 	"return"     { return newToken(Terminals.RETURN); }
 	"while"      { return newToken(Terminals.WHILE); }
-	"False"      { return newToken(Terminals.FALSE); }
+	{False}      { return newToken(Terminals.FALSE); }
 	"else"       { return newToken(Terminals.ELSE); }
 	"then"       { return newToken(Terminals.THEN); }
-	"True"       { return newToken(Terminals.TRUE); }
+	{True}       { return newToken(Terminals.TRUE); }
 	"for"        { return newToken(Terminals.FOR); }
 	"not"        { return newToken(Terminals.NOT); }
 	"or"		 { return newToken(Terminals.OR); }

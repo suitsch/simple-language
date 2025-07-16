@@ -16,6 +16,8 @@ public interface AnalysisVisitor<R> {
 
     R visitIntLiteral(IntLiteral intLiteral);
 
+    R visitBooleanLiteral(BooleanLiteral booleanLiteral);
+
     R visitPlusExpr(PlusExpr plusExpr);
 
     R visitSubExpr(SubExpr subExpr);

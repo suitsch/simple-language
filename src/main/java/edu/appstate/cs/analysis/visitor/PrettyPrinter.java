@@ -32,6 +32,11 @@ public class PrettyPrinter implements AnalysisVisitor<String> {
     }
 
     @Override
+    public String visitBooleanLiteral(BooleanLiteral booleanLiteral) {
+        return booleanLiteral.getValue() ? "True" : "False";
+    }
+
+    @Override
     public String visitPlusExpr(PlusExpr plusExpr) {
         return String.format("(%s + %s)", plusExpr.getLeft().accept(this), plusExpr.getRight().accept(this));
     }
