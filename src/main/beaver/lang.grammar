@@ -9,7 +9,7 @@
            LT, LTEQ, GT, GTEQ,
            RBRACKET, LPAREN, RPAREN, INTEGER, STRING,
            TRUE, FALSE, IDENTIFIER, PLUS, MULT, NOTEQL, DIV, SUB, IF,
-           VAR, NOT, EQUAL, OR, AND;
+           VAR, NOT, EQUAL, OR, AND, NEG;
 
 %typeof INTEGER = "BigInteger";
 %typeof IDENTIFIER = "String";
@@ -18,6 +18,7 @@
 %typeof stmt = "Stmt";
 %typeof elseifs = "ElseIfList";
 %typeof elseif = "ElseIf";
+%typeof exprs = "ExprList";
 
 %left RPAREN;
 %right NOT;
@@ -33,7 +34,7 @@
 /* This can be removed once all tokens are used in a real production */
 /* START */
 %goal placeholder;
-placeholder = COMMA LBRACKET RBRACKET LPAREN RPAREN STRING TRUE FALSE SUB;
+placeholder = LPAREN RPAREN STRING;
 /* END */
 
 stmts
@@ -68,6 +69,7 @@ expr
     | TRUE {: return new BooleanLiteral(true); :}
     | FALSE {: return new BooleanLiteral(false); :}
     | expr.a PLUS expr.b {: return new PlusExpr(a, b); :}
+    | expr.a SUB expr.b {: return new SubExpr(a, b); :}
     | expr.a MULT expr.b {: return new MultExpr(a, b); :}
     | expr.a EQUAL expr.b {: return new EqualExpr(a, b); :}
     | expr.a OR expr.b {: return new OrExpr(a, b); :}
@@ -80,4 +82,12 @@ expr
     | expr.a LTEQ expr.b {: return new LtEqExpr(a, b); :}
     | expr.a GT expr.b {: return new GtExpr(a, b); :}
     | expr.a GTEQ expr.b {: return new GtEqExpr(a, b); :}
+    | NEG expr.a {: return new NegExpr (a); :}
+    | LBRACKET RBRACKET {: return new ListExpr(new ExprList()); :}
+    | LBRACKET exprs.es RBRACKET {: return new ListExpr(es); :}
+    ;
+
+exprs
+    = expr.e {: return new ExprList(e); :}
+    | expr.e COMMA exprs.es {: return new ExprList(e, es); :}
     ;
