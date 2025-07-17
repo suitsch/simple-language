@@ -85,6 +85,7 @@ expr
     | NEG expr.a {: return new NegExpr (a); :}
     | LBRACKET RBRACKET {: return new ListExpr(new ExprList()); :}
     | LBRACKET exprs.es RBRACKET {: return new ListExpr(es); :}
+    | LPAREN expr.e RPAREN {: return e; :}
     ;
 
 exprs
