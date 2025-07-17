@@ -21,7 +21,7 @@
 %typeof exprs = "ExprList";
 
 %left RPAREN;
-%right NOT;
+%right NOT, NEG;
 %left MULT, DIV;
 %left PLUS, SUB;
 %left GTEQ, GT, LTEQ, LT;
