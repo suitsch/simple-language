@@ -53,6 +53,7 @@ False          = [Ff][Aa][Ll][Ss][Ee]
 	{True}       { return newToken(Terminals.TRUE); }
 	"for"        { return newToken(Terminals.FOR); }
 	"not"        { return newToken(Terminals.NOT); }
+	"var"        { return newToken(Terminals.VAR); } // DeclStmt
 	"or"		 { return newToken(Terminals.OR); }
 	"in"         { return newToken(Terminals.IN); }
 	"if"         { return newToken(Terminals.IF); }
@@ -60,6 +61,7 @@ False          = [Ff][Aa][Ll][Ss][Ee]
 	"and"		 { return newToken(Terminals.AND); }
 	"<="         { return newToken(Terminals.LTEQ); }
 	">="         { return newToken(Terminals.GTEQ); }
+	"!="         { return newToken(Terminals.NOTEQL); }
 	"<"          { return newToken(Terminals.LT); }
 	">"          { return newToken(Terminals.GT); }
 	"="          { return newToken(Terminals.ASSIGN); }
@@ -75,8 +77,6 @@ False          = [Ff][Aa][Ll][Ss][Ee]
 	"*"          { return newToken(Terminals.MULT); }
 	"/"          { return newToken(Terminals.DIV); }
 	"~"          { return newToken(Terminals.NEG); }
-	"!="         { return newToken(Terminals.NOTEQL); }
-	"var"        { return newToken(Terminals.VAR); } // DeclStmt
 	{Identifier} { return newToken(Terminals.IDENTIFIER, new String(yytext())); }
 }
 
