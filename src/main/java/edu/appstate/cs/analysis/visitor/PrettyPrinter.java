@@ -2,6 +2,9 @@ package edu.appstate.cs.analysis.visitor;
 
 import edu.appstate.cs.analysis.ast.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PrettyPrinter implements AnalysisVisitor<String> {
     @Override
     public String visitStmtList(StmtList stmtList) {
@@ -19,6 +22,16 @@ public class PrettyPrinter implements AnalysisVisitor<String> {
             buf.append(ei.accept(this)).append("\n");
         }
         return buf.toString();
+    }
+
+    @Override
+    public String visitExprList(ExprList exprList) {
+        StringBuffer buf = new StringBuffer();
+        List<String> results  = new ArrayList<>();
+        for (Expr e : exprList) {
+            results.add(e.accept(this));
+        }
+        return String.join(", ",  results);
     }
 
     @Override
@@ -123,6 +136,16 @@ public class PrettyPrinter implements AnalysisVisitor<String> {
     @Override
     public String visitGtEqExpr(GtEqExpr gtEqExpr) {
         return String.format("(%s >= %s)", gtEqExpr.getLeft().accept(this), gtEqExpr.getRight().accept(this));
+    }
+
+    @Override
+    public String visitListExpr(ListExpr listExpr) {
+        return String.format("[%s]", listExpr.getList().accept(this));
+    }
+
+    @Override
+    public String visitNegExpr(NegExpr negExpr) {
+        return String.format("(~%s)", negExpr.getExpr().accept(this));
     }
 
     @Override

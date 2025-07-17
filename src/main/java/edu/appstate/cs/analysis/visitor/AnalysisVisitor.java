@@ -8,6 +8,8 @@ public interface AnalysisVisitor<R> {
 
     R visitElseIfList(ElseIfList elseIfList);
 
+    R visitExprList(ExprList exprList);
+
     R visitElseIf(ElseIf elseIf);
 
     R visitIfStmt(IfStmt ifStmt);
@@ -55,4 +57,8 @@ public interface AnalysisVisitor<R> {
     R visitGtExpr(GtExpr gtExpr);
 
     R visitGtEqExpr(GtEqExpr gtEqExpr);
+
+    R visitListExpr(ListExpr listExpr);
+
+    R visitNegExpr(NegExpr negExpr);
 }
