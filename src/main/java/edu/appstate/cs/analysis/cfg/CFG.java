@@ -295,8 +295,27 @@ public class CFG {
 
         @Override
         public Set<Edge> visitWhileStmt(WhileStmt whileStmt) {
-            // TODO: Add needed logic here
-            return Set.of();
+            Set<Edge> edges = new HashSet<>();
+
+            // Add edges from the condition and body
+            edges.addAll(whileStmt.getExpr().accept(this));
+            edges.addAll(whileStmt.getStmts().accept(this));
+
+            // Link the condition to the body
+            Set<Node> finalConditionNodes = whileStmt.getExpr().accept(finalFinder);
+            Node firstBodyNode = whileStmt.getStmts().accept(firstFinder);
+            for (Node n : finalConditionNodes) {
+                edges.add(new Edge(n, firstBodyNode));
+            }
+
+            // Link the end of the body back to the condition
+            Set<Node> finalBodyNodes = whileStmt.getStmts().accept(finalFinder);
+            Node firstConditionNode = whileStmt.getExpr().accept(firstFinder);
+            for (Node n : finalBodyNodes) {
+                edges.add(new Edge(n, firstConditionNode));
+            }
+
+            return edges;
         }
 
         @Override
@@ -364,8 +383,18 @@ public class CFG {
 
         @Override
         public Set<Edge> visitDeclStmt(DeclStmt declStmt) {
-            // TODO: Add needed logic here
-            return Set.of();
+            Set<Edge> edges = new HashSet<>();
+
+            if (declStmt.getExpr() != null) {
+                edges.addAll(declStmt.getExpr().accept(this));
+                Set<Node> finalNodes = declStmt.getExpr().accept(finalFinder);
+                Node firstNode = declStmt.accept(firstFinder);
+                for (Node n : finalNodes) {
+                    edges.add(new Edge(n, firstNode));
+                }
+            }
+
+            return edges;
         }
 
         @Override
