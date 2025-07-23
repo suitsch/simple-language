@@ -1,26 +1,21 @@
-package edu.appstate.cs.analysis.visitor;
+package edu.appstate.cs.analysis.cfg;
 
 import edu.appstate.cs.analysis.ast.*;
+import edu.appstate.cs.analysis.visitor.AnalysisVisitor;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PrettyPrinter implements AnalysisVisitor<String> {
+public class NodePrinter implements AnalysisVisitor<String> {
     @Override
     public String visitStmtList(StmtList stmtList) {
         StringBuffer buf = new StringBuffer();
-        for (Stmt stmt : stmtList) {
-            buf.append(stmt.accept(this)).append("\n");
-        }
         return buf.toString();
     }
 
     @Override
     public String visitElseIfList(ElseIfList elseIfList) {
         StringBuffer buf = new StringBuffer();
-        for (ElseIf ei : elseIfList) {
-            buf.append(ei.accept(this)).append("\n");
-        }
         return buf.toString();
     }
 

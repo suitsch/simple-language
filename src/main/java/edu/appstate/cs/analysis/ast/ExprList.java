@@ -24,6 +24,10 @@ public class ExprList extends Symbol implements Iterable<Expr> {
         exprList.addAll(es.exprList);
     }
 
+    public int size() {
+        return exprList.size();
+    }
+
     @Override
     public Iterator<Expr> iterator() {
         return exprList.iterator();

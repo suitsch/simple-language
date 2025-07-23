@@ -74,6 +74,7 @@ False          = [Ff][Aa][Ll][Ss][Ee]
 	"("          { return newToken(Terminals.LPAREN); }
 	")"          { return newToken(Terminals.RPAREN); }
 	"+"          { return newToken(Terminals.PLUS); }
+	"-"          { return newToken(Terminals.MINUS); }
 	"*"          { return newToken(Terminals.MULT); }
 	"/"          { return newToken(Terminals.DIV); }
 	"~"          { return newToken(Terminals.NEG); }

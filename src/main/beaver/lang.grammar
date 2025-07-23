@@ -8,7 +8,7 @@
            LCURLY, RCURLY, THEN, COMMA, LBRACKET,
            LT, LTEQ, GT, GTEQ,
            RBRACKET, LPAREN, RPAREN, INTEGER, STRING,
-           TRUE, FALSE, IDENTIFIER, PLUS, MULT, NOTEQL, DIV, SUB, IF,
+           TRUE, FALSE, IDENTIFIER, PLUS, MULT, NOTEQL, DIV, MINUS, IF,
            VAR, NOT, EQUAL, OR, AND, NEG;
 
 %typeof INTEGER = "BigInteger";
@@ -23,7 +23,7 @@
 %left RPAREN;
 %right NOT, NEG;
 %left MULT, DIV;
-%left PLUS, SUB;
+%left PLUS, MINUS;
 %left GTEQ, GT, LTEQ, LT;
 %left EQUAL, NOTEQL;
 %left OR;
@@ -69,7 +69,7 @@ expr
     | TRUE {: return new BooleanLiteral(true); :}
     | FALSE {: return new BooleanLiteral(false); :}
     | expr.a PLUS expr.b {: return new PlusExpr(a, b); :}
-    | expr.a SUB expr.b {: return new SubExpr(a, b); :}
+    | expr.a MINUS expr.b {: return new SubExpr(a, b); :}
     | expr.a MULT expr.b {: return new MultExpr(a, b); :}
     | expr.a EQUAL expr.b {: return new EqualExpr(a, b); :}
     | expr.a OR expr.b {: return new OrExpr(a, b); :}

@@ -24,6 +24,10 @@ public class ElseIfList extends Symbol implements Iterable<ElseIf> {
         elseIfList.addAll(eis.elseIfList);
     }
 
+    public int size() {
+        return elseIfList.size();
+    }
+
     @Override
     public Iterator<ElseIf> iterator() {
         return elseIfList.iterator();

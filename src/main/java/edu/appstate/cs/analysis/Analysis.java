@@ -2,6 +2,7 @@ package edu.appstate.cs.analysis;
 
 import edu.appstate.cs.analysis.ast.HelloWorld;
 import edu.appstate.cs.analysis.ast.StmtList;
+import edu.appstate.cs.analysis.cfg.CFG;
 import edu.appstate.cs.analysis.parser.FileParser;
 import edu.appstate.cs.analysis.visitor.PrettyPrinter;
 import org.jline.reader.LineReader;
@@ -42,6 +43,19 @@ public class Analysis {
                         String prettyPrinted = program.accept(new PrettyPrinter());
                         terminal.writer().println("Loaded program:");
                         terminal.writer().println(prettyPrinted);
+                    }
+                } else if (contents.startsWith("#cfg")) {
+                    String fileToLoad = contents.split(" ")[1];
+                    File file = new File(fileToLoad);
+                    if (!file.exists()) {
+                        terminal.writer().println("File " + fileToLoad + " does not exist!");
+                    } else {
+                        StmtList program = FileParser.parseFile(file.getAbsolutePath());
+                        terminal.writer().println("Loaded program");
+                        CFG cfg = new CFG();
+                        cfg.buildCFG(program);
+                        String graph = cfg.toDot();
+                        terminal.writer().println(graph);
                     }
                 } else if (contents.equalsIgnoreCase("#help")) {
                     terminal.writer().println("You can use the following command:");

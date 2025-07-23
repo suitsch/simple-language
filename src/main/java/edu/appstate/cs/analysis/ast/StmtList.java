@@ -24,6 +24,10 @@ public class StmtList extends Symbol implements Iterable<Stmt> {
         stmtList.addAll(ss.stmtList);
     }
 
+    public int size() {
+        return stmtList.size();
+    }
+
     @Override
     public Iterator<Stmt> iterator() {
         return stmtList.iterator();
