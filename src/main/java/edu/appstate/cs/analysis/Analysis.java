@@ -1,5 +1,6 @@
 package edu.appstate.cs.analysis;
 
+import edu.appstate.cs.analysis.analysis.ReachingDefs;
 import edu.appstate.cs.analysis.ast.HelloWorld;
 import edu.appstate.cs.analysis.ast.StmtList;
 import edu.appstate.cs.analysis.cfg.CFG;
@@ -15,6 +16,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class Analysis {
     public static void main(String[] args) {
@@ -56,6 +60,29 @@ public class Analysis {
                         cfg.buildCFG(program);
                         String graph = cfg.toDot();
                         terminal.writer().println(graph);
+                    }
+                } else if (contents.startsWith("#defs")) {
+                    String fileToLoad = contents.split(" ")[1];
+                    File file = new File(fileToLoad);
+                    if (!file.exists()) {
+                        terminal.writer().println("File " + fileToLoad + " does not exist!");
+                    } else {
+                        StmtList program = FileParser.parseFile(file.getAbsolutePath());
+                        terminal.writer().println("Loaded program");
+                        CFG cfg = new CFG();
+                        cfg.buildCFG(program);
+                        String graph = cfg.toDot();
+                        terminal.writer().println(graph);
+                        ReachingDefs reachingDefs = new ReachingDefs(cfg);
+                        Map<String, Set<ReachingDefs.Def>> defs = reachingDefs.computeDefs();
+                        terminal.writer().println("Defs:");
+                        for (String key : defs.keySet()) {
+                            if (defs.get(key).size() > 0) {
+                                for (ReachingDefs.Def def : defs.get(key)) {
+                                    terminal.writer().println("Location " + key + ": " + def);
+                                }
+                            }
+                        }
                     }
                 } else if (contents.equalsIgnoreCase("#help")) {
                     terminal.writer().println("You can use the following command:");

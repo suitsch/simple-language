@@ -14,6 +14,7 @@ public class CFG {
     private NodePrinter nodePrinter = new NodePrinter();
     private Node.EntryNode entryNode = new Node.EntryNode();
     private Node.ExitNode exitNode = new Node.ExitNode();
+    private HashMap<Node, String> nodeIdMap = new HashMap<>();
 
     /**
      * Given a program, build the control flow graph
@@ -89,18 +90,30 @@ public class CFG {
         return exitNode;
     }
 
+    /**
+     * Given a node, return its ID, or null if the node is not known
+     *
+     * @param node the node to look up
+     *
+     * @return the id of the node, or null if the node is not known
+     */
+    public String getNodeId(Node node) {
+        if (nodeIdMap.containsKey(node)) {
+            return nodeIdMap.get(node);
+        }
+        return null;
+    }
+
+    /**
+     * Print the control-flow graph using Dot notation.
+     *
+     * @return the CFG as a Dot graph
+     */
     public String toDot() {
         StringBuilder sb = new StringBuilder();
         sb.append("digraph CFG {").append("\n");
         sb.append("graph [ label=\"Control Flow Graph\" ];").append("\n");
         sb.append("node [shape=box];").append("\n");
-
-        // Assign IDs to the nodes
-        HashMap<Node, String> nodeIdMap = new HashMap<>();
-        int idCounter = 0;
-        for (Node node : nodes) {
-            nodeIdMap.put(node, Integer.toString(idCounter++));
-        }
 
         // Print the nodes
         for (Node node : nodes) {
@@ -163,6 +176,12 @@ public class CFG {
             for (Edge edge : edges) {
                 nodes.add(edge.from);
                 nodes.add(edge.to);
+            }
+
+            // Assign IDs to the nodes
+            int idCounter = 0;
+            for (Node node : nodes) {
+                nodeIdMap.put(node, Integer.toString(idCounter++));
             }
         }
 
