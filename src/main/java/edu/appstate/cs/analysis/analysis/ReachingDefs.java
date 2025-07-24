@@ -2,6 +2,7 @@ package edu.appstate.cs.analysis.analysis;
 
 import edu.appstate.cs.analysis.ast.*;
 import edu.appstate.cs.analysis.cfg.CFG;
+import edu.appstate.cs.analysis.cfg.Node;
 import edu.appstate.cs.analysis.visitor.AnalysisVisitor;
 
 import java.util.*;
@@ -45,10 +46,40 @@ public class ReachingDefs {
         // TODO: We will add the analysis here!
 
         // Step 1: Compute gen, we need a visitor for this!
+        Map<String, Set<Def>> gen = new HashMap<>();
+        GenVisitor genVisitor = new GenVisitor();
+        for (Node n : cfg.getNodes()) {
+            gen.put(cfg.getNodeId(n), n.accept(genVisitor));
+        }
 
         // Step 2: Compute defs, this can be based on gen
+        Map<String, Set<Def>> defs = new HashMap<>();
+        for (String nodeId : gen.keySet()) {
+            for (Def def : gen.get(nodeId)) {
+                if (! defs.containsKey(def.name)) {
+                    defs.put(def.name, new HashSet<>());
+                }
+                defs.get(def.name).add(def);
+            }
+        }
 
         // Step 3: Compute kill based on gen and defs
+        Map<String, Set<Def>> kills = new HashMap<>();
+        for (String nodeId : gen.keySet()) {
+            // Store all the defs killed at this node
+            Set<Def> nodeKills = new HashSet<>();
+
+            // If we generated anything in this node, use that to compute kills
+            if (gen.get(nodeId).size() > 0) {
+                for (Def def : gen.get(nodeId)) {
+                    // Given a definition of a name n, we kill all other definitions of n
+                    Set<Def> killSet = Set.copyOf(defs.get(def.name));
+                    killSet.remove(def);
+                    nodeKills.addAll(killSet);
+                }
+            }
+            kills.put(nodeId, nodeKills);
+        }
 
         // Step 4: Use this info to compute reach. We will do this
         // and iterate until the info stabilizes.
@@ -61,38 +92,19 @@ public class ReachingDefs {
 
         @Override
         public Set<Def> visitStmtList(StmtList stmtList) {
-            Set<Def> defs = new HashSet<>();
-            for (Stmt stmt : stmtList) {
-                defs.addAll(stmt.accept(this));
-            }
-            return defs;
-        }
+            return Set.of();        }
 
         @Override
         public Set<Def> visitElseIfList(ElseIfList elseIfList) {
-            Set<Def> defs = new HashSet<>();
-            for (ElseIf elseIf : elseIfList) {
-                defs.addAll(elseIf.accept(this));
-            }
-            return defs;
-        }
+            return Set.of();        }
 
         @Override
         public Set<Def> visitExprList(ExprList exprList) {
-            Set<Def> defs = new HashSet<>();
-            for (Expr expr : exprList) {
-                defs.addAll(expr.accept(this));
-            }
-            return defs;
-        }
+            return Set.of();        }
 
         @Override
         public Set<Def> visitElseIf(ElseIf elseIf) {
-            Set<Def> defs = new HashSet<>();
-            defs.addAll(elseIf.getCondition().accept(this));
-            defs.addAll(elseIf.getBody().accept(this));
-            return defs;
-        }
+            return Set.of();        }
 
         @Override
         public Set<Def> visitIfStmt(IfStmt ifStmt) {
@@ -101,7 +113,7 @@ public class ReachingDefs {
 
         @Override
         public Set<Def> visitAssignStmt(AssignStmt assignStmt) {
-            return Set.of();
+            return Set.of(new Def(assignStmt.getIdent(), "put it here"));
         }
 
         @Override
@@ -166,6 +178,7 @@ public class ReachingDefs {
 
         @Override
         public Set<Def> visitDeclStmt(DeclStmt declStmt) {
+            // TODO: Revisit this
             return Set.of();
         }
 
