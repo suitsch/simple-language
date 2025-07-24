@@ -11,6 +11,14 @@ public abstract class Node {
         return null; // This should never be called
     }
 
+    public static class EntryNode extends Node {
+
+    }
+
+    public static class ExitNode extends Node {
+
+    }
+
     public static class ExprNode extends Node {
         private Expr expr;
         public ExprNode(Expr expr) {

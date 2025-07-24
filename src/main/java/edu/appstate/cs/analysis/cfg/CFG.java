@@ -3,10 +3,8 @@ package edu.appstate.cs.analysis.cfg;
 import edu.appstate.cs.analysis.ast.*;
 import edu.appstate.cs.analysis.visitor.AnalysisVisitor;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class CFG {
     private Set<Node> nodes = new HashSet<>();
@@ -14,10 +12,81 @@ public class CFG {
     private FirstFinder firstFinder = new FirstFinder();
     private FinalFinder finalFinder = new FinalFinder();
     private NodePrinter nodePrinter = new NodePrinter();
+    private Node.EntryNode entryNode = new Node.EntryNode();
+    private Node.ExitNode exitNode = new Node.ExitNode();
 
+    /**
+     * Given a program, build the control flow graph
+     *
+     * @param stmtList the list of statements making up the program
+     */
     public void buildCFG(StmtList stmtList) {
         GraphBuilder graphBuilder = new GraphBuilder();
         graphBuilder.buildCFG(stmtList);
+    }
+
+    /**
+     * Given an input node, get the predecessors of the node in the CFG
+     *
+     * @param node the input node
+     *
+     * @return the predecessors of the input node, i.e., pred(n)
+     */
+    public Set<Node> getPredecessors(Node node) {
+        return edges.stream()
+                    .filter((e) -> e.to.equals(node))
+                    .map((e) -> e.from)
+                    .collect(Collectors.toSet());
+    }
+
+    /**
+     * Given an input node, get the successors of the node in the CFG
+     *
+     * @param node the input node
+     *
+     * @return the successors of the input node, i.e., succ(n)
+     */
+    public Set<Node> getSuccessors(Node node) {
+        return edges.stream()
+                .filter((e) -> e.from.equals(node))
+                .map((e) -> e.to)
+                .collect(Collectors.toSet());
+    }
+
+    /**
+     * Get the set of nodes for the graph
+     *
+     * @return the set of nodes
+     */
+    public Set<Node> getNodes() {
+        return Set.copyOf(nodes);
+    }
+
+    /**
+     * Get the set of edges for the graph
+     *
+     * @return the graph edges
+     */
+    public Set<Edge> getEdges() {
+        return Set.copyOf(edges);
+    }
+
+    /**
+     * Get the entry node for the CFG.
+     *
+     * @return the entry node
+     */
+    public Node getEntryNode() {
+        return entryNode;
+    }
+
+    /**
+     * Get the exit node for the CFG.
+     *
+     * @return the exit node
+     */
+    public Node getExitNode() {
+        return exitNode;
     }
 
     public String toDot() {
@@ -35,7 +104,13 @@ public class CFG {
 
         // Print the nodes
         for (Node node : nodes) {
-            sb.append(String.format("\"N%s\" [ label = \"%s\" ];", nodeIdMap.get(node), node.accept(nodePrinter))).append("\n");
+            if (node instanceof Node.EntryNode) {
+                sb.append(String.format("\"N%s\" [ label = \"%s\" ];", nodeIdMap.get(node), "Entry")).append("\n");
+            } else if (node instanceof Node.ExitNode) {
+                sb.append(String.format("\"N%s\" [ label = \"%s\" ];", nodeIdMap.get(node), "Exit")).append("\n");
+            } else {
+                sb.append(String.format("\"N%s\" [ label = \"%s\" ];", nodeIdMap.get(node), node.accept(nodePrinter))).append("\n");
+            }
         }
 
         // Print the edges
@@ -50,11 +125,44 @@ public class CFG {
 
     private class GraphBuilder implements AnalysisVisitor<Set<Edge>> {
 
+        // TODO: Conditions with multiple else-ifs followed by an else are not linked correctly
+
         public void buildCFG(StmtList stmtList) {
             edges = stmtList.accept(this);
-            nodes = new  HashSet<>();
+
+            List<Stmt> stmts = new ArrayList<>();
+            for (Stmt stmt : stmtList) {
+                stmts.add(stmt);
+            }
+
+            // Link the entry node to the start of the list
+            Node firstNode = stmts.get(0).accept(firstFinder);
+            edges.add(new Edge(entryNode, firstNode));
+
+            // Link the exit node to the end of the list
+            Set<Node> lastNodes = stmts.get(stmts.size() - 1).accept(finalFinder);
+            for (Node lastNode : lastNodes) {
+                edges.add(new Edge(lastNode, exitNode));
+            }
+
+            // Remove edges from return statements that don't go to the exit node
+            Set<Edge> edgesToRemove = new HashSet<>();
+            for (Edge e : edges) {
+                if (e.from instanceof Node.StmtNode) {
+                    Node.StmtNode sn = (Node.StmtNode) e.from;
+                    if (sn.getStmt() instanceof ReturnStmt) {
+                        if (!(e.to instanceof Node.ExitNode)) {
+                            edgesToRemove.add(e);
+                        }
+                    }
+                }
+            }
+            edges.removeAll(edgesToRemove);
+
+            nodes = new HashSet<>();
             for (Edge edge : edges) {
-                nodes.add(edge.from); nodes.add(edge.to);
+                nodes.add(edge.from);
+                nodes.add(edge.to);
             }
         }
 
@@ -78,7 +186,7 @@ public class CFG {
             for (int i = 0; i < (stmts.size() - 1); ++i) {
                 Set<Node> finalOfCurrent = stmts.get(i).accept(finalFinder);
                 Node firstOfNext = stmts.get(i + 1).accept(firstFinder);
-                for (Node n :  finalOfCurrent) {
+                for (Node n : finalOfCurrent) {
                     edges.add(new Edge(n, firstOfNext));
                 }
             }
@@ -108,7 +216,7 @@ public class CFG {
             for (int i = 0; i < (elseIfs.size() - 1); ++i) {
                 Set<Node> finalOfCurrent = elseIfs.get(i).getCondition().accept(finalFinder);
                 Node firstOfNext = elseIfs.get(i + 1).getCondition().accept(firstFinder);
-                for (Node n :  finalOfCurrent) {
+                for (Node n : finalOfCurrent) {
                     edges.add(new Edge(n, firstOfNext));
                 }
             }
@@ -136,7 +244,7 @@ public class CFG {
             for (int i = 0; i < (exprs.size() - 1); ++i) {
                 Set<Node> finalOfCurrent = exprs.get(i).accept(finalFinder);
                 Node firstOfNext = exprs.get(i + 1).accept(firstFinder);
-                for (Node n :  finalOfCurrent) {
+                for (Node n : finalOfCurrent) {
                     edges.add(new Edge(n, firstOfNext));
                 }
             }
@@ -159,18 +267,50 @@ public class CFG {
 
         @Override
         public Set<Edge> visitIfStmt(IfStmt ifStmt) {
-            // TODO: Add the code here to link all this up, this is the
-            // most complex piece...
-            return Set.of();
+            Set<Edge> edges = new HashSet<>();
+
+            // Compute all the internal edges
+            edges.addAll(ifStmt.getCondition().accept(this));
+            edges.addAll(ifStmt.getThenBody().accept(this));
+            if (ifStmt.getElseIfs() != null) {
+                edges.addAll(ifStmt.getElseIfs().accept(this));
+            }
+            if (ifStmt.getElseBody() != null) {
+                edges.addAll(ifStmt.getElseBody().accept(this));
+            }
+
+            // Link the condition properly -- it goes to the then body, but
+            // also to the first else-if (if present) or else (if present).
+            // Note that we don't have labels on our edges -- if we did, we
+            // would include information on the condition there.
+            Set<Node> endOfCondition = ifStmt.getCondition().accept(finalFinder);
+            Node firstOfThen = ifStmt.getThenBody().accept(firstFinder);
+            for (Node n : endOfCondition) {
+                edges.add(new Edge(n, firstOfThen));
+            }
+
+            if (ifStmt.getElseIfs() != null) {
+                Node firstOfElseIfs = ifStmt.getElseIfs().accept(firstFinder);
+                for (Node n : endOfCondition) {
+                    edges.add(new Edge(n, firstOfElseIfs));
+                }
+            } else if (ifStmt.getElseBody() != null) {
+                Node firstOfElseBody = ifStmt.getElseBody().accept(firstFinder);
+                for (Node n : endOfCondition) {
+                    edges.add(new Edge(n, firstOfElseBody));
+                }
+            }
+
+            return edges;
         }
 
         @Override
         public Set<Edge> visitAssignStmt(AssignStmt assignStmt) {
             Set<Edge> edges = new HashSet<>();
             edges.addAll(assignStmt.getExpr().accept(this));
-            Node firstNode = assignStmt.accept(firstFinder);
+            Node assignNode = new Node.StmtNode(assignStmt);
             for (Node n : assignStmt.getExpr().accept(finalFinder)) {
-                edges.add(new Edge(n, firstNode));
+                edges.add(new Edge(n, assignNode));
             }
             return edges;
         }
@@ -194,7 +334,7 @@ public class CFG {
             edges.addAll(plusExpr.getRight().accept(this));
 
             // Build edges from the final nodes on the left to the first node on the right
-            Node firstRight =  plusExpr.getRight().accept(firstFinder);
+            Node firstRight = plusExpr.getRight().accept(firstFinder);
             Set<Node> finalLeft = plusExpr.getLeft().accept(finalFinder);
             for (Node n : finalLeft) {
                 edges.add(new Edge(n, firstRight));
@@ -218,7 +358,7 @@ public class CFG {
             edges.addAll(subExpr.getRight().accept(this));
 
             // Build edges from the final nodes on the left to the first node on the right
-            Node firstRight =  subExpr.getRight().accept(firstFinder);
+            Node firstRight = subExpr.getRight().accept(firstFinder);
             Set<Node> finalLeft = subExpr.getLeft().accept(finalFinder);
             for (Node n : finalLeft) {
                 edges.add(new Edge(n, firstRight));
@@ -242,7 +382,7 @@ public class CFG {
             edges.addAll(multExpr.getRight().accept(this));
 
             // Build edges from the final nodes on the left to the first node on the right
-            Node firstRight =  multExpr.getRight().accept(firstFinder);
+            Node firstRight = multExpr.getRight().accept(firstFinder);
             Set<Node> finalLeft = multExpr.getLeft().accept(finalFinder);
             for (Node n : finalLeft) {
                 edges.add(new Edge(n, firstRight));
@@ -267,7 +407,7 @@ public class CFG {
             edges.addAll(divExpr.getRight().accept(this));
 
             // Build edges from the final nodes on the left to the first node on the right
-            Node firstRight =  divExpr.getRight().accept(firstFinder);
+            Node firstRight = divExpr.getRight().accept(firstFinder);
             Set<Node> finalLeft = divExpr.getLeft().accept(finalFinder);
             for (Node n : finalLeft) {
                 edges.add(new Edge(n, firstRight));
@@ -289,8 +429,32 @@ public class CFG {
 
         @Override
         public Set<Edge> visitForStmt(ForStmt forStmt) {
-            // TODO: Add needed logic here
-            return Set.of();
+            Set<Edge> edges = new HashSet<>();
+
+            // Add the edges for the expression and the body
+            edges.addAll(forStmt.getExpr().accept(this));
+            edges.addAll(forStmt.getStmts().accept(this));
+
+            // Judgement call: the expression should only be evaluated once,
+            // to get the list to iterate over, so we link from that but then
+            // we loop back to the first statement, NOT to the expression.
+            Set<Node> exprEndNodes = forStmt.getExpr().accept(finalFinder);
+            Node firstStmtNode = forStmt.getStmts().accept(firstFinder);
+            Set<Node> finalBodyNodes = forStmt.getStmts().accept(finalFinder);
+
+            // First, from the expression to the body
+            for (Node en : exprEndNodes) {
+                edges.add(new Edge(en, firstStmtNode));
+            }
+
+            // Then the backedge at the end, back to the start of the body
+            for (Node fbn : finalBodyNodes) {
+                edges.add(new Edge(fbn, firstStmtNode));
+            }
+
+            // NOTE: We do NOT represent the assignment each iteration into the loop
+            // variable. We would need a synthetic node to represent this.
+            return edges;
         }
 
         @Override
@@ -322,7 +486,7 @@ public class CFG {
         public Set<Edge> visitExprStmt(ExprStmt exprStmt) {
             Set<Edge> edges = new HashSet<>();
             edges.addAll(exprStmt.getExpr().accept(this));
-            Set<Node> finalNodes =  exprStmt.getExpr().accept(finalFinder);
+            Set<Node> finalNodes = exprStmt.getExpr().accept(finalFinder);
 
             // Build edges from the final nodes on the right to the overall expression
             for (Node n : finalNodes) {
@@ -342,7 +506,7 @@ public class CFG {
             edges.addAll(notEqlExpr.getRight().accept(this));
 
             // Build edges from the final nodes on the left to the first node on the right
-            Node firstRight =  notEqlExpr.getRight().accept(firstFinder);
+            Node firstRight = notEqlExpr.getRight().accept(firstFinder);
             Set<Node> finalLeft = notEqlExpr.getLeft().accept(finalFinder);
             for (Node n : finalLeft) {
                 edges.add(new Edge(n, firstRight));
@@ -366,7 +530,7 @@ public class CFG {
             edges.addAll(equalExpr.getRight().accept(this));
 
             // Build edges from the final nodes on the left to the first node on the right
-            Node firstRight =  equalExpr.getRight().accept(firstFinder);
+            Node firstRight = equalExpr.getRight().accept(firstFinder);
             Set<Node> finalLeft = equalExpr.getLeft().accept(finalFinder);
             for (Node n : finalLeft) {
                 edges.add(new Edge(n, firstRight));
@@ -388,9 +552,11 @@ public class CFG {
             if (declStmt.getExpr() != null) {
                 edges.addAll(declStmt.getExpr().accept(this));
                 Set<Node> finalNodes = declStmt.getExpr().accept(finalFinder);
-                Node firstNode = declStmt.accept(firstFinder);
+                Set<Node> declNodes = declStmt.accept(finalFinder);
                 for (Node n : finalNodes) {
-                    edges.add(new Edge(n, firstNode));
+                    for (Node m : declNodes) {
+                        edges.add(new Edge(n, m));
+                    }
                 }
             }
 
@@ -413,8 +579,19 @@ public class CFG {
 
         @Override
         public Set<Edge> visitReturnStmt(ReturnStmt returnStmt) {
-            // TODO: Add needed logic here
-            return Set.of();
+            Set<Edge> edges = new HashSet<>();
+            edges.addAll(returnStmt.getRetExpr().accept(this));
+
+            // Build edges from the final nodes on the right to the overall expression
+            Node returnNode = new Node.StmtNode(returnStmt);
+            for (Node n : returnStmt.getRetExpr().accept(finalFinder)) {
+                edges.add(new Edge(n, returnNode));
+            }
+
+            // Add an edge from the return node to the exit
+            edges.add(new Edge(returnNode, exitNode));
+
+            return edges;
         }
 
         @Override
@@ -426,7 +603,7 @@ public class CFG {
             edges.addAll(orExpr.getRightExpr().accept(this));
 
             // Build edges from the final nodes on the left to the first node on the right
-            Node firstRight =  orExpr.getRightExpr().accept(firstFinder);
+            Node firstRight = orExpr.getRightExpr().accept(firstFinder);
             Set<Node> finalLeft = orExpr.getLeftExpr().accept(finalFinder);
             for (Node n : finalLeft) {
                 edges.add(new Edge(n, firstRight));
@@ -451,7 +628,7 @@ public class CFG {
             edges.addAll(andExpr.getRight().accept(this));
 
             // Build edges from the final nodes on the left to the first node on the right
-            Node firstRight =  andExpr.getRight().accept(firstFinder);
+            Node firstRight = andExpr.getRight().accept(firstFinder);
             Set<Node> finalLeft = andExpr.getLeft().accept(finalFinder);
             for (Node n : finalLeft) {
                 edges.add(new Edge(n, firstRight));
@@ -475,7 +652,7 @@ public class CFG {
             edges.addAll(ltExpr.getRight().accept(this));
 
             // Build edges from the final nodes on the left to the first node on the right
-            Node firstRight =  ltExpr.getRight().accept(firstFinder);
+            Node firstRight = ltExpr.getRight().accept(firstFinder);
             Set<Node> finalLeft = ltExpr.getLeft().accept(finalFinder);
             for (Node n : finalLeft) {
                 edges.add(new Edge(n, firstRight));
@@ -499,7 +676,7 @@ public class CFG {
             edges.addAll(ltEqExpr.getRight().accept(this));
 
             // Build edges from the final nodes on the left to the first node on the right
-            Node firstRight =  ltEqExpr.getRight().accept(firstFinder);
+            Node firstRight = ltEqExpr.getRight().accept(firstFinder);
             Set<Node> finalLeft = ltEqExpr.getLeft().accept(finalFinder);
             for (Node n : finalLeft) {
                 edges.add(new Edge(n, firstRight));
@@ -523,7 +700,7 @@ public class CFG {
             edges.addAll(gtExpr.getRight().accept(this));
 
             // Build edges from the final nodes on the left to the first node on the right
-            Node firstRight =  gtExpr.getRight().accept(firstFinder);
+            Node firstRight = gtExpr.getRight().accept(firstFinder);
             Set<Node> finalLeft = gtExpr.getLeft().accept(finalFinder);
             for (Node n : finalLeft) {
                 edges.add(new Edge(n, firstRight));
@@ -547,7 +724,7 @@ public class CFG {
             edges.addAll(gtEqExpr.getRight().accept(this));
 
             // Build edges from the final nodes on the left to the first node on the right
-            Node firstRight =  gtEqExpr.getRight().accept(firstFinder);
+            Node firstRight = gtEqExpr.getRight().accept(firstFinder);
             Set<Node> finalLeft = gtEqExpr.getLeft().accept(finalFinder);
             for (Node n : finalLeft) {
                 edges.add(new Edge(n, firstRight));
@@ -564,8 +741,16 @@ public class CFG {
 
         @Override
         public Set<Edge> visitListExpr(ListExpr listExpr) {
-            // TODO: Add logic here
-            return Set.of();
+            Set<Edge> edges = new HashSet<>();
+            edges.addAll(listExpr.getList().accept(this));
+
+            Set<Node> finalNodes = listExpr.getList().accept(finalFinder);
+            Node listNode = new Node.ExprNode(listExpr);
+            for (Node n : finalNodes) {
+                edges.add(new Edge(n, listNode));
+            }
+
+            return edges;
         }
 
         @Override

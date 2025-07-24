@@ -50,7 +50,7 @@ public class FinalFinder implements AnalysisVisitor<Set<Node>>
         result.addAll(ifStmt.getThenBody().accept(this));
 
         // The final item in each else-if branch is also a possible final node
-        if (ifStmt.getElseIfs().size() > 0) {
+        if (ifStmt.getElseIfs() != null && ifStmt.getElseIfs().size() > 0) {
             for (ElseIf elseIf : ifStmt.getElseIfs()) {
                 result.addAll(elseIf.getBody().accept(this));
             }
