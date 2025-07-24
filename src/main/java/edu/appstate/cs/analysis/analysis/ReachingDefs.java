@@ -40,7 +40,7 @@ public class ReachingDefs {
     }
 
     public Map<String, Set<Def>> computeDefs() {
-        Map<String, Set<Def>> defs = new HashMap<>();
+        Map<String, Set<Def>> reachingDefs = new HashMap<>();
 
         // TODO: We will add the analysis here!
 
@@ -53,7 +53,7 @@ public class ReachingDefs {
         // Step 4: Use this info to compute reach. We will do this
         // and iterate until the info stabilizes.
 
-        return defs;
+        return reachingDefs;
     }
 
     // What goes here???
