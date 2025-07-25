@@ -41,12 +41,8 @@ public class ReachingDefs {
     }
 
     public Map<String, Set<Def>> computeDefs() {
-        Map<String, Set<Def>> reachingDefs = new HashMap<>();
-
-        // TODO: We will add the analysis here!
-
         // Step 1: Compute gen, we need a visitor for this!
-        Map<String, Set<Def>> gen = new HashMap<>();
+        Map<String, Set<Def>> gen = new HashMap<>(); // A map from node IDs to the set of defs gen'ed by the node
         GenVisitor genVisitor = new GenVisitor();
         for (Node n : cfg.getNodes()) {
             Set<Def> defsForNode = n.accept(genVisitor);
@@ -56,10 +52,11 @@ public class ReachingDefs {
             gen.put(cfg.getNodeId(n), defsForNode);
         }
 
+        // NOTE: This is informational, we would normally remove this...
         System.out.println("Gen: " + gen);
 
         // Step 2: Compute defs, this can be based on gen
-        Map<String, Set<Def>> defs = new HashMap<>();
+        Map<String, Set<Def>> defs = new HashMap<>(); // A map from variable name to the set of defs of that name
         for (String nodeId : gen.keySet()) {
             for (Def def : gen.get(nodeId)) {
                 if (! defs.containsKey(def.name)) {
@@ -69,10 +66,11 @@ public class ReachingDefs {
             }
         }
 
+        // NOTE: This is informational, we would normally remove this...
         System.out.println("Defs: " + defs);
 
         // Step 3: Compute kill based on gen and defs
-        Map<String, Set<Def>> kills = new HashMap<>();
+        Map<String, Set<Def>> kills = new HashMap<>(); // A map from node IDs to the set of defs killed by that node
         for (String nodeId : gen.keySet()) {
             // Store all the defs killed at this node
             Set<Def> nodeKills = new HashSet<>();
@@ -89,12 +87,27 @@ public class ReachingDefs {
             kills.put(nodeId, nodeKills);
         }
 
+        // NOTE: This is informational, we would normally remove this...
         System.out.println("Kills: " + kills);
 
         // Step 4: Use this info to compute reach. We will do this
         // and iterate until the info stabilizes.
+        Map<String, Set<Def>> reachIn = new HashMap<>();
+        Map<String, Set<Def>> reachOut = new HashMap<>();
+        Map<String, Set<Def>> oldReachIn = Collections.emptyMap();
+        Map<String, Set<Def>> oldReachOut = Collections.emptyMap();
+        do {
+            // We keep going while reachIn and reachOut change, so we need to save
+            // their current state here.
+            oldReachIn = new HashMap<>(reachIn);
+            oldReachOut = new HashMap<>(reachOut);
 
-        return reachingDefs;
+            // TODO: Using the algorithm for reaching defs, iterate over all
+            // nodes and update the reach sets. This is what you need to update
+            // for the lab.
+        } while (!reachIn.equals(oldReachIn) || !reachOut.equals(oldReachOut));
+
+        return reachIn; // This shows which defs reach each node, so we return this
     }
 
     // What goes here???
