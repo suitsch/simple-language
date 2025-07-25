@@ -73,6 +73,7 @@ public class Analysis {
                         cfg.buildCFG(program);
                         String graph = cfg.toDot();
                         terminal.writer().println(graph);
+                        terminal.writer().flush();
                         ReachingDefs reachingDefs = new ReachingDefs(cfg);
                         Map<String, Set<ReachingDefs.Def>> defs = reachingDefs.computeDefs();
                         terminal.writer().println("Defs:");

@@ -118,11 +118,11 @@ public class CFG {
         // Print the nodes
         for (Node node : nodes) {
             if (node instanceof Node.EntryNode) {
-                sb.append(String.format("\"N%s\" [ label = \"%s\" ];", nodeIdMap.get(node), "Entry")).append("\n");
+                sb.append(String.format("\"N%s\" [ label = \"N%s:%s\" ];", nodeIdMap.get(node), nodeIdMap.get(node), "Entry")).append("\n");
             } else if (node instanceof Node.ExitNode) {
-                sb.append(String.format("\"N%s\" [ label = \"%s\" ];", nodeIdMap.get(node), "Exit")).append("\n");
+                sb.append(String.format("\"N%s\" [ label = \"N%s:%s\" ];", nodeIdMap.get(node), nodeIdMap.get(node), "Exit")).append("\n");
             } else {
-                sb.append(String.format("\"N%s\" [ label = \"%s\" ];", nodeIdMap.get(node), node.accept(nodePrinter))).append("\n");
+                sb.append(String.format("\"N%s\" [ label = \"N%s:%s\" ];", nodeIdMap.get(node), nodeIdMap.get(node), node.accept(nodePrinter))).append("\n");
             }
         }
 

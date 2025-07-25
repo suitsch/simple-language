@@ -49,8 +49,14 @@ public class ReachingDefs {
         Map<String, Set<Def>> gen = new HashMap<>();
         GenVisitor genVisitor = new GenVisitor();
         for (Node n : cfg.getNodes()) {
-            gen.put(cfg.getNodeId(n), n.accept(genVisitor));
+            Set<Def> defsForNode = n.accept(genVisitor);
+            if (defsForNode == null) {
+                defsForNode = Collections.emptySet();
+            }
+            gen.put(cfg.getNodeId(n), defsForNode);
         }
+
+        System.out.println("Gen: " + gen);
 
         // Step 2: Compute defs, this can be based on gen
         Map<String, Set<Def>> defs = new HashMap<>();
@@ -63,6 +69,8 @@ public class ReachingDefs {
             }
         }
 
+        System.out.println("Defs: " + defs);
+
         // Step 3: Compute kill based on gen and defs
         Map<String, Set<Def>> kills = new HashMap<>();
         for (String nodeId : gen.keySet()) {
@@ -73,13 +81,15 @@ public class ReachingDefs {
             if (gen.get(nodeId).size() > 0) {
                 for (Def def : gen.get(nodeId)) {
                     // Given a definition of a name n, we kill all other definitions of n
-                    Set<Def> killSet = Set.copyOf(defs.get(def.name));
+                    Set<Def> killSet = new HashSet<>(defs.get(def.name));
                     killSet.remove(def);
                     nodeKills.addAll(killSet);
                 }
             }
             kills.put(nodeId, nodeKills);
         }
+
+        System.out.println("Kills: " + kills);
 
         // Step 4: Use this info to compute reach. We will do this
         // and iterate until the info stabilizes.
@@ -88,7 +98,7 @@ public class ReachingDefs {
     }
 
     // What goes here???
-    private static class GenVisitor implements AnalysisVisitor<Set<Def>> {
+    private class GenVisitor implements AnalysisVisitor<Set<Def>> {
 
         @Override
         public Set<Def> visitStmtList(StmtList stmtList) {
@@ -113,7 +123,7 @@ public class ReachingDefs {
 
         @Override
         public Set<Def> visitAssignStmt(AssignStmt assignStmt) {
-            return Set.of(new Def(assignStmt.getIdent(), "put it here"));
+            return Set.of(new Def(assignStmt.getIdent(), cfg.getNodeId(new Node.StmtNode(assignStmt))));
         }
 
         @Override
