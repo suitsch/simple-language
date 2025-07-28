@@ -94,6 +94,11 @@ public class ReachingDefs {
         // and iterate until the info stabilizes.
         Map<String, Set<Def>> reachIn = new HashMap<>();
         Map<String, Set<Def>> reachOut = new HashMap<>();
+        for (Node n : cfg.getNodes()) {
+            reachIn.put(cfg.getNodeId(n), Collections.emptySet());
+            reachOut.put(cfg.getNodeId(n), Collections.emptySet());
+        }
+        
         Map<String, Set<Def>> oldReachIn = Collections.emptyMap();
         Map<String, Set<Def>> oldReachOut = Collections.emptyMap();
         do {
@@ -105,6 +110,18 @@ public class ReachingDefs {
             // TODO: Using the algorithm for reaching defs, iterate over all
             // nodes and update the reach sets. This is what you need to update
             // for the lab.
+            for (Node n : cfg.getNodes()) {
+                String nLabel = cfg.getNodeId(n);
+                Set<Node> preds = cfg.getPredecessors(n);
+                Set<Def> defsFromPredecessors = new HashSet<>();
+                for (Node p : preds) {
+                    defsFromPredecessors.addAll(oldReachOut.get(cfg.getNodeId(p)));
+                }
+                reachIn.put(nLabel, defsFromPredecessors);
+
+                // TODO: Compute reach out!
+            }
+
         } while (!reachIn.equals(oldReachIn) || !reachOut.equals(oldReachOut));
 
         return reachIn; // This shows which defs reach each node, so we return this
